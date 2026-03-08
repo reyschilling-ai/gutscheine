@@ -4,261 +4,305 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Gutscheine</title>
-<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f5f0e8;
-  --surface: #ffffff;
-  --surface2: #faf7f2;
-  --border: #e2d9cc;
-  --accent: #2d6a4f;
-  --accent-light: #40916c;
-  --accent-pale: #d8f3dc;
-  --text: #1a1a16;
-  --text-muted: #7a7060;
-  --danger: #c0392b;
-  --danger-pale: #fde8e6;
-  --warning: #b7791f;
-  --warning-pale: #fef3cd;
-  --success: #2d6a4f;
-  --radius: 14px;
-  --shadow: 0 2px 12px rgba(0,0,0,0.07);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --bg: #0c0f0a;
+  --surface: #141810;
+  --surface2: #1c2118;
+  --border: #2a3024;
+  --accent: #7cb87a;
+  --accent-dim: #4a7a48;
+  --accent-pale: #1e2e1c;
+  --text: #e8ede4;
+  --text-muted: #6b7a64;
+  --danger: #e07070;
+  --danger-pale: #2a1818;
+  --warning: #d4a843;
+  --warning-pale: #2a2010;
+  --radius: 12px;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
 body {
-  font-family: 'Karla', sans-serif;
+  font-family: 'Outfit', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  padding-bottom: 80px;
+  padding-bottom: 90px;
 }
 
-/* HEADER */
-.app-header {
-  background: var(--accent);
-  color: white;
-  padding: 20px 20px 24px;
+/* ── HEADER ── */
+.header {
+  padding: 20px 20px 0;
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 2px 16px rgba(45,106,79,0.3);
+  background: var(--bg);
+}
+
+.header-inner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
 }
 
 .header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .app-title {
-  font-family: 'Lora', serif;
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-family: 'Fraunces', serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--accent);
   letter-spacing: -0.3px;
 }
 
-.header-actions { display: flex; gap: 8px; }
+.header-btns { display:flex; gap:8px; }
 
-.icon-btn {
-  background: rgba(255,255,255,0.15);
-  border: none;
+.hbtn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  color: white;
-  width: 38px; height: 38px;
+  color: var(--text-muted);
+  width: 34px; height: 34px;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  font-size: 1.1rem;
-  transition: background 0.2s;
+  font-size: 1rem;
+  transition: all 0.15s;
 }
-.icon-btn:hover { background: rgba(255,255,255,0.25); }
+.hbtn:hover { border-color: var(--accent); color: var(--accent); }
 
-.summary-row {
+.stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 8px;
 }
 
-.sum-item {
-  background: rgba(255,255,255,0.12);
+.stat {
+  background: var(--surface2);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 12px;
   text-align: center;
 }
 
-.sum-val {
-  font-family: 'Lora', serif;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: white;
+.stat-val {
+  font-family: 'Fraunces', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
   display: block;
+  line-height: 1;
 }
 
-.sum-lbl {
-  font-size: 0.7rem;
-  color: rgba(255,255,255,0.7);
+.stat-lbl {
+  font-size: 0.68rem;
+  color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   display: block;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
-.sum-item.warn .sum-val { color: #ffd166; }
-.sum-item.danger .sum-val { color: #ff8b80; }
+.stat.s-warn .stat-val { color: var(--warning); }
+.stat.s-danger .stat-val { color: var(--danger); }
 
-/* SEARCH BAR */
-.search-wrap {
-  padding: 14px 16px 0;
+/* ── SEARCH + TABS ── */
+.controls {
+  padding: 0 20px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
-.search-input {
+.search-box {
+  flex: 1;
+  position: relative;
+}
+
+.search-box input {
   width: 100%;
   background: var(--surface);
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 11px 16px 11px 40px;
-  font-size: 0.95rem;
-  font-family: 'Karla', sans-serif;
+  padding: 10px 14px 10px 36px;
   color: var(--text);
+  font-size: 0.9rem;
+  font-family: 'Outfit', sans-serif;
   outline: none;
   transition: border-color 0.2s;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237a7060' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.742 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: 14px center;
 }
 
-.search-input:focus { border-color: var(--accent); }
+.search-box input:focus { border-color: var(--accent); }
+.search-box input::placeholder { color: var(--text-muted); }
 
-/* TABS */
+.search-icon {
+  position: absolute;
+  left: 12px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
 .tabs {
   display: flex;
-  gap: 0;
-  padding: 14px 16px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+  flex-shrink: 0;
 }
 
 .tab {
-  flex: 1;
-  padding: 9px;
-  text-align: center;
-  font-size: 0.85rem;
+  padding: 7px 14px;
+  font-size: 0.82rem;
   font-weight: 500;
-  font-family: 'Karla', sans-serif;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
+  font-family: 'Outfit', sans-serif;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
   color: var(--text-muted);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
+  white-space: nowrap;
 }
 
-.tab:first-child { border-radius: 10px 0 0 10px; }
-.tab:last-child { border-radius: 0 10px 10px 0; border-left: none; }
-.tab:not(:first-child):not(:last-child) { border-left: none; }
-
 .tab.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
+  background: var(--accent-pale);
+  color: var(--accent);
   font-weight: 600;
 }
 
-/* MAIN CONTENT */
-.content { padding: 16px; }
+/* ── STATUS ── */
+.status-bar {
+  margin: 0 20px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  display: none;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
 
-/* SHOP GROUP */
+.sdot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.sdot-load { background: var(--warning); animation: blink 1s infinite; }
+.sdot-ok   { background: var(--accent); }
+.sdot-err  { background: var(--danger); }
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+/* ── CONTENT ── */
+.content { padding: 0 20px; }
+
+/* ── SHOP GROUP ── */
 .shop-group {
   background: var(--surface);
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow);
-  animation: fadeIn 0.25s ease;
+  animation: fadeUp 0.2s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
 }
 
-.shop-header {
+.shop-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
+  padding: 13px 16px;
   cursor: pointer;
-  user-select: none;
   gap: 10px;
+  user-select: none;
+  transition: background 0.15s;
 }
+.shop-head:hover { background: var(--surface2); }
 
-.shop-header:active { background: var(--surface2); }
-
-.shop-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-
-.shop-icon {
-  width: 36px; height: 36px;
+.shop-emoji {
+  font-size: 1.1rem;
+  width: 32px; height: 32px;
   background: var(--accent-pale);
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem;
   flex-shrink: 0;
 }
 
 .shop-name {
-  font-family: 'Lora', serif;
+  font-family: 'Fraunces', serif;
   font-size: 1rem;
   font-weight: 600;
-  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.shop-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.shop-pills { display:flex; gap:6px; align-items:center; flex-shrink:0; }
 
 .pill {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  padding: 3px 10px;
+  padding: 3px 9px;
   border-radius: 20px;
+  white-space: nowrap;
 }
 
-.pill-green { background: var(--accent-pale); color: var(--accent); }
-.pill-gray { background: #f0ece4; color: var(--text-muted); }
-.pill-warn { background: var(--warning-pale); color: var(--warning); }
-.pill-danger { background: var(--danger-pale); color: var(--danger); }
+.pill-g { background: var(--accent-pale); color: var(--accent); }
+.pill-w { background: var(--warning-pale); color: var(--warning); }
+.pill-d { background: var(--danger-pale); color: var(--danger); }
+.pill-n { background: var(--surface2); color: var(--text-muted); }
 
-.chevron {
+.chev {
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   transition: transform 0.2s;
+  flex-shrink: 0;
 }
 
-.shop-group.collapsed .chevron { transform: rotate(-90deg); }
-.shop-group.collapsed .shop-cards { display: none; }
+.shop-group.collapsed .chev { transform: rotate(-90deg); }
+.shop-group.collapsed .shop-cards { display:none; }
 
 .shop-cards {
-  border-top: 1.5px solid var(--border);
+  border-top: 1px solid var(--border);
   padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* VOUCHER CARD */
+/* ── VOUCHER CARD ── */
 .vcard {
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px;
   background: var(--surface2);
-  position: relative;
   transition: border-color 0.2s;
 }
 
-.vcard.expiring { border-color: #f6c453; }
-.vcard.expired-card { border-color: #e8a09a; background: #fff8f7; }
-.vcard.archived-card { opacity: 0.65; }
+.vcard.vc-expiring { border-color: #5a4010; }
+.vcard.vc-expired  { border-color: #4a1818; background: #1a1010; }
+.vcard.vc-archived { opacity: 0.55; }
 
 .vcard-top {
   display: flex;
@@ -267,63 +311,69 @@ body {
   margin-bottom: 10px;
 }
 
-.vcard-value {
-  font-family: 'Lora', serif;
-  font-size: 1.7rem;
+.vcard-amount {
+  font-family: 'Fraunces', serif;
+  font-size: 1.75rem;
   font-weight: 700;
   line-height: 1;
   color: var(--text);
 }
 
-.vcard-value .currency { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
-
-.vcard-of {
-  font-size: 0.78rem;
+.vcard-amount .eur {
+  font-size: 1rem;
   color: var(--text-muted);
-  margin-top: 2px;
+  font-weight: 300;
 }
 
-.expiry-badge {
-  font-size: 0.72rem;
+.vcard-of {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+  font-style: italic;
+}
+
+.exp-badge {
+  font-size: 0.7rem;
   font-weight: 600;
   padding: 4px 9px;
   border-radius: 6px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.eb-ok { background: var(--accent-pale); color: var(--accent); }
+.eb-ok   { background: var(--accent-pale); color: var(--accent); }
 .eb-warn { background: var(--warning-pale); color: var(--warning); }
-.eb-danger { background: var(--danger-pale); color: var(--danger); }
-.eb-none { background: #f0ece4; color: var(--text-muted); }
+.eb-bad  { background: var(--danger-pale); color: var(--danger); }
+.eb-none { background: var(--surface); color: var(--text-muted); }
 
-.progress-bar {
-  height: 5px;
+.pbar {
+  height: 4px;
   background: var(--border);
-  border-radius: 5px;
+  border-radius: 4px;
   margin-bottom: 10px;
   overflow: hidden;
 }
 
-.progress-fill {
+.pfill {
   height: 100%;
-  border-radius: 5px;
+  border-radius: 4px;
   background: var(--accent);
   transition: width 0.4s;
 }
-.progress-fill.pct-low { background: var(--warning); }
-.progress-fill.pct-vlow { background: var(--danger); }
+.pfill.p-mid  { background: var(--warning); }
+.pfill.p-low  { background: var(--danger); }
 
-.vcard-meta {
+.vcard-chips {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
   margin-bottom: 10px;
-  align-items: center;
 }
 
-.meta-chip {
-  font-size: 0.72rem;
-  background: #f0ece4;
+.chip {
+  font-size: 0.7rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
   color: var(--text-muted);
   padding: 3px 8px;
   border-radius: 5px;
@@ -331,976 +381,952 @@ body {
 }
 
 .vcard-note {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   font-style: italic;
-  margin-bottom: 10px;
   padding-top: 8px;
   border-top: 1px solid var(--border);
+  margin-bottom: 10px;
 }
 
 .vcard-actions {
   display: flex;
-  gap: 8px;
+  gap: 7px;
+  flex-wrap: wrap;
 }
 
-.act-btn {
+.abtn {
   flex: 1;
-  padding: 7px;
+  min-width: 80px;
+  padding: 7px 10px;
   border-radius: 7px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  font-family: 'Karla', sans-serif;
-  border: 1.5px solid var(--border);
+  font-family: 'Outfit', sans-serif;
+  border: 1px solid var(--border);
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
   text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   transition: all 0.15s;
 }
 
-.act-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-pale); }
-.act-btn.danger:hover { border-color: var(--danger); color: var(--danger); background: var(--danger-pale); }
-.act-btn.restore:hover { border-color: var(--accent-light); color: var(--accent-light); background: var(--accent-pale); }
+.abtn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-pale); }
+.abtn.red:hover { border-color: var(--danger); color: var(--danger); background: var(--danger-pale); }
 
-/* FAB */
+/* ── FAB ── */
 .fab {
   position: fixed;
-  bottom: 24px;
-  right: 20px;
-  width: 58px; height: 58px;
+  bottom: 24px; right: 20px;
+  width: 56px; height: 56px;
   background: var(--accent);
-  color: white;
+  color: var(--bg);
   border: none;
   border-radius: 50%;
-  font-size: 1.6rem;
-  box-shadow: 0 4px 20px rgba(45,106,79,0.45);
+  font-size: 1.5rem;
+  font-weight: 300;
+  box-shadow: 0 4px 24px rgba(124,184,122,0.35);
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
+  display: none;
+  align-items: center;
+  justify-content: center;
   z-index: 40;
   transition: transform 0.2s, background 0.2s;
 }
-
-.fab:hover { background: var(--accent-light); transform: scale(1.07); }
+.fab:hover { transform: scale(1.08); background: #8fcf8d; }
 .fab:active { transform: scale(0.95); }
 
-/* EMPTY */
+/* ── EMPTY ── */
 .empty {
   text-align: center;
-  padding: 50px 20px;
+  padding: 60px 20px;
   color: var(--text-muted);
 }
-.empty-icon { font-size: 2.8rem; margin-bottom: 12px; }
-.empty h3 { font-family: 'Lora', serif; color: var(--text); margin-bottom: 6px; font-size: 1.1rem; }
-.empty p { font-size: 0.85rem; }
+.empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.empty h3 { font-family: 'Fraunces', serif; color: var(--text); margin-bottom: 6px; }
 
-/* MODALS */
+/* ── OVERLAYS ── */
 .overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0,0,0,0.6);
   z-index: 200;
   align-items: flex-end;
   justify-content: center;
   padding: 0;
 }
-
 .overlay.open { display: flex; }
 
 .modal {
   background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 20px 20px 0 0;
-  padding: 24px 20px 36px;
+  padding: 20px 20px 36px;
   width: 100%;
-  max-width: 520px;
+  max-width: 500px;
   max-height: 92vh;
   overflow-y: auto;
-  animation: slideUp 0.25s ease;
+  animation: slideUp 0.22s ease;
 }
 
-@media (min-width: 540px) {
-  .overlay { align-items: center; padding: 20px; }
-  .modal { border-radius: 20px; max-height: 88vh; }
+@media (min-width:520px) {
+  .overlay { align-items:center; padding:20px; }
+  .modal { border-radius:16px; }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
 }
 
-.modal-handle {
-  width: 36px; height: 4px;
-  background: var(--border);
-  border-radius: 4px;
-  margin: 0 auto 20px;
+.drag-handle {
+  width:32px; height:4px;
+  background:var(--border);
+  border-radius:4px;
+  margin:0 auto 18px;
 }
-
-@media (min-width: 540px) { .modal-handle { display: none; } }
+@media(min-width:520px){.drag-handle{display:none}}
 
 .modal h2 {
-  font-family: 'Lora', serif;
-  font-size: 1.25rem;
-  margin-bottom: 20px;
-  color: var(--text);
+  font-family:'Fraunces',serif;
+  font-size:1.2rem;
+  font-weight:600;
+  color:var(--accent);
+  margin-bottom:18px;
 }
 
-.form-group { margin-bottom: 14px; }
+.fg { margin-bottom:14px; }
 
-.form-group label {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
+.fg label {
+  display:block;
+  font-size:0.72rem;
+  font-weight:600;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  margin-bottom:5px;
 }
 
-.form-group input, .form-group select {
-  width: 100%;
-  background: var(--surface2);
-  border: 1.5px solid var(--border);
-  border-radius: 9px;
-  padding: 11px 14px;
-  color: var(--text);
-  font-size: 1rem;
-  font-family: 'Karla', sans-serif;
-  outline: none;
-  transition: border-color 0.2s;
-  -webkit-appearance: none;
+.fg input, .fg select {
+  width:100%;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 13px;
+  color:var(--text);
+  font-size:0.95rem;
+  font-family:'Outfit',sans-serif;
+  outline:none;
+  transition:border-color 0.2s;
+  -webkit-appearance:none;
+}
+.fg input:focus { border-color:var(--accent); }
+
+.row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+.mfooter {
+  display:flex;
+  gap:10px;
+  margin-top:20px;
 }
 
-.form-group input:focus { border-color: var(--accent); }
+.mbtn {
+  flex:1;
+  background:var(--accent);
+  color:var(--bg);
+  border:none;
+  border-radius:9px;
+  padding:12px;
+  font-size:0.95rem;
+  font-weight:600;
+  font-family:'Outfit',sans-serif;
+  cursor:pointer;
+  transition:background 0.2s;
+}
+.mbtn:hover { background:#8fcf8d; }
 
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mbtn-cancel {
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text-muted);
+  border-radius:9px;
+  padding:12px 18px;
+  font-size:0.95rem;
+  font-family:'Outfit',sans-serif;
+  cursor:pointer;
+  transition:border-color 0.2s;
+}
+.mbtn-cancel:hover { border-color:var(--accent); }
 
-.modal-footer {
-  display: flex;
-  gap: 10px;
-  margin-top: 22px;
+/* ── SETUP ── */
+.setup-wrap {
+  max-width:480px;
+  margin:0 auto;
+  padding:24px 20px 40px;
 }
 
-.btn-main {
-  flex: 1;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 13px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  font-family: 'Karla', sans-serif;
-  cursor: pointer;
-  transition: background 0.2s;
+.setup-wrap h1 {
+  font-family:'Fraunces',serif;
+  font-size:1.6rem;
+  color:var(--accent);
+  margin-bottom:6px;
 }
 
-.btn-main:hover { background: var(--accent-light); }
-
-.btn-cancel {
-  background: var(--surface2);
-  border: 1.5px solid var(--border);
-  color: var(--text-muted);
-  border-radius: 10px;
-  padding: 13px 20px;
-  font-size: 0.95rem;
-  font-family: 'Karla', sans-serif;
-  cursor: pointer;
+.setup-wrap .sub {
+  font-size:0.88rem;
+  color:var(--text-muted);
+  margin-bottom:24px;
+  line-height:1.5;
 }
 
-/* LOADING / ERROR STATES */
-.status-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
+.sfield { margin-bottom:14px; }
+
+.sfield label {
+  display:block;
+  font-size:0.72rem;
+  font-weight:600;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  margin-bottom:5px;
 }
 
-.status-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
+.sfield input {
+  width:100%;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:11px 14px;
+  color:var(--text);
+  font-size:0.95rem;
+  font-family:'Outfit',sans-serif;
+  outline:none;
+  transition:border-color 0.2s;
 }
-.dot-ok { background: var(--accent); }
-.dot-loading { background: var(--warning); animation: pulse 1s infinite; }
-.dot-error { background: var(--danger); }
+.sfield input:focus { border-color:var(--accent); }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-/* SETUP SCREEN */
-.setup-screen {
-  padding: 30px 20px;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-.setup-screen h2 {
-  font-family: 'Lora', serif;
-  font-size: 1.3rem;
-  margin-bottom: 8px;
-  color: var(--accent);
+.hint {
+  font-size:0.75rem;
+  color:var(--text-muted);
+  margin-top:5px;
+  line-height:1.4;
 }
 
-.setup-screen p {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  margin-bottom: 20px;
-  line-height: 1.5;
+.sbtn {
+  width:100%;
+  background:var(--accent);
+  color:var(--bg);
+  border:none;
+  border-radius:10px;
+  padding:14px;
+  font-size:1rem;
+  font-weight:600;
+  font-family:'Outfit',sans-serif;
+  cursor:pointer;
+  margin-top:8px;
+  transition:background 0.2s;
+}
+.sbtn:hover { background:#8fcf8d; }
+
+.steps {
+  margin-top:28px;
+  border-top:1px solid var(--border);
+  padding-top:24px;
 }
 
-.setup-field {
-  margin-bottom: 14px;
+.steps h3 {
+  font-family:'Fraunces',serif;
+  font-size:1rem;
+  margin-bottom:14px;
+  color:var(--text);
 }
 
-.setup-field label {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
+.step {
+  display:flex;
+  gap:12px;
+  margin-bottom:14px;
+  font-size:0.86rem;
+  color:var(--text-muted);
+  line-height:1.5;
 }
 
-.setup-field input {
-  width: 100%;
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 9px;
-  padding: 11px 14px;
-  font-size: 0.95rem;
-  font-family: 'Karla', sans-serif;
-  color: var(--text);
-  outline: none;
+.step-n {
+  background:var(--accent-pale);
+  color:var(--accent);
+  font-weight:700;
+  font-size:0.75rem;
+  width:22px; height:22px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  margin-top:1px;
 }
 
-.setup-field input:focus { border-color: var(--accent); }
-
-.setup-hint {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  margin-top: 5px;
-  line-height: 1.4;
+.step a { color:var(--accent); }
+code {
+  background:var(--surface2);
+  padding:1px 6px;
+  border-radius:4px;
+  font-size:0.82rem;
+  color:var(--accent);
 }
 
-.btn-setup {
-  width: 100%;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 14px;
-  font-size: 1rem;
-  font-weight: 600;
-  font-family: 'Karla', sans-serif;
-  cursor: pointer;
-  margin-top: 6px;
-  transition: background 0.2s;
+/* PDF upload */
+.pdf-drop {
+  border:2px dashed var(--border);
+  border-radius:9px;
+  padding:14px;
+  text-align:center;
+  cursor:pointer;
+  transition:border-color 0.2s, background 0.2s;
+  font-size:0.85rem;
+  color:var(--text-muted);
 }
-
-.btn-setup:hover { background: var(--accent-light); }
-
-.divider {
-  border: none;
-  border-top: 1.5px solid var(--border);
-  margin: 20px 0;
-}
-
-.step-list {
-  list-style: none;
-  counter-reset: steps;
-}
-
-.step-list li {
-  counter-increment: steps;
-  display: flex;
-  gap: 12px;
-  margin-bottom: 14px;
-  font-size: 0.88rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-
-.step-list li::before {
-  content: counter(steps);
-  background: var(--accent-pale);
-  color: var(--accent);
-  font-weight: 700;
-  font-size: 0.8rem;
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.link-btn {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 600;
-}
+.pdf-drop:hover { border-color:var(--accent); background:var(--accent-pale); }
 </style>
 </head>
 <body>
 
-<!-- SETUP SCREEN (shown when not configured) -->
+<!-- ══ SETUP SCREEN ══ -->
 <div id="setupScreen" style="display:none">
-  <div class="app-header" style="border-radius:0">
-    <div class="header-top">
-      <span class="app-title">🎁 Gutscheine — Einrichtung</span>
-    </div>
-  </div>
-  <div class="setup-screen">
-    <h2>Willkommen!</h2>
-    <p>Bitte geben Sie Ihre Google Drive API-Daten ein. Diese werden nur auf diesem Gerät gespeichert.</p>
+  <div class="setup-wrap">
+    <h1>🎁 Gutscheine</h1>
+    <p class="sub">Einmalige Einrichtung — danach läuft alles automatisch auf allen Geräten.</p>
 
-    <div class="setup-field">
-      <label>Client ID</label>
-      <input type="text" id="cfgClientId" placeholder="xxxxxxx.apps.googleusercontent.com">
-      <div class="setup-hint">Aus der Google Cloud Console (OAuth 2.0 Client-ID)</div>
+    <div class="sfield">
+      <label>OAuth Client ID</label>
+      <input type="text" id="cfgClientId" placeholder="xxxxxx.apps.googleusercontent.com">
+      <div class="hint">Aus Google Cloud Console → APIs & Dienste → Anmeldedaten</div>
     </div>
 
-    <div class="setup-field">
+    <div class="sfield">
       <label>API Key</label>
-      <input type="text" id="cfgApiKey" placeholder="AIzaSy...">
+      <input type="text" id="cfgApiKey" placeholder="AIzaSy…">
     </div>
 
-    <div class="setup-field">
-      <label>Datei-ID der gutscheine.json</label>
-      <input type="text" id="cfgFileId" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms">
-      <div class="setup-hint">Die ID aus dem Google Drive Link der JSON-Datei</div>
+    <div class="sfield">
+      <label>Google Spreadsheet ID</label>
+      <input type="text" id="cfgSheetId" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms">
+      <div class="hint">Aus der URL Ihres Google Sheets: docs.google.com/spreadsheets/d/<strong>ID</strong>/edit</div>
     </div>
 
-    <div class="setup-field">
+    <div class="sfield">
       <label>Lösch-Passwort</label>
       <input type="password" id="cfgPassword" placeholder="Sicheres Passwort wählen">
-      <div class="setup-hint">Wird benötigt um Gutscheine endgültig aus dem Archiv zu löschen</div>
+      <div class="hint">Nur zum endgültigen Löschen aus dem Archiv nötig</div>
     </div>
 
-    <button class="btn-setup" onclick="saveConfig()">Einrichtung abschließen →</button>
+    <button class="sbtn" onclick="saveConfig()">Einrichtung abschließen →</button>
 
-    <hr class="divider">
+    <div class="steps">
+      <h3>Einrichtungsanleitung</h3>
 
-    <h2 style="font-size:1.1rem;margin-bottom:12px;color:var(--text)">Einrichtungsanleitung</h2>
-    <ol class="step-list">
-      <li>Öffnen Sie <a class="link-btn" href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a> und erstellen Sie ein neues Projekt (z.B. „Gutscheine")</li>
-      <li>Aktivieren Sie die <strong>Google Drive API</strong> unter „APIs & Dienste" → „Bibliothek"</li>
-      <li>Erstellen Sie unter „APIs & Dienste" → „Anmeldedaten" einen <strong>API-Schlüssel</strong> und kopieren Sie ihn oben ein</li>
-      <li>Erstellen Sie eine <strong>OAuth 2.0 Client-ID</strong> (Typ: Webanwendung). Fügen Sie als autorisierte JavaScript-Quelle die URL dieser Datei hinzu (oder <code>https://storage.googleapis.com</code> wenn Sie Google Drive direkt nutzen)</li>
-      <li>Erstellen Sie in Ihrem Google Drive eine leere Datei namens <strong>gutscheine.json</strong> mit dem Inhalt <code>[]</code> und teilen Sie diese Datei mit Ihrer Frau</li>
-      <li>Öffnen Sie die JSON-Datei in Drive, kopieren Sie die <strong>Datei-ID</strong> aus der URL und fügen Sie sie oben ein</li>
-      <li>Wiederholen Sie diese Einrichtung auf dem zweiten Gerät Ihrer Frau — verwenden Sie dieselbe Datei-ID und dasselbe Passwort</li>
-    </ol>
+      <div class="step"><div class="step-n">1</div><div>Öffnen Sie <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a> → wählen Sie Ihr Projekt „Gutscheine"</div></div>
+      <div class="step"><div class="step-n">2</div><div>„APIs &amp; Dienste" → „Bibliothek" → suchen Sie nach <strong>Google Sheets API</strong> → aktivieren</div></div>
+      <div class="step"><div class="step-n">3</div><div>„APIs &amp; Dienste" → „Anmeldedaten" → Ihren API-Schlüssel kopieren (beginnt mit <code>AIzaSy</code>)</div></div>
+      <div class="step"><div class="step-n">4</div><div>Ihre OAuth Client-ID kopieren (endet auf <code>.apps.googleusercontent.com</code>)</div></div>
+      <div class="step"><div class="step-n">5</div><div>Gehen Sie zu <a href="https://sheets.google.com" target="_blank">sheets.google.com</a> → erstellen Sie eine neue leere Tabelle → benennen Sie sie „Gutscheine"</div></div>
+      <div class="step"><div class="step-n">6</div><div>Kopieren Sie die <strong>Spreadsheet-ID</strong> aus der URL (der lange Code zwischen <code>/d/</code> und <code>/edit</code>)</div></div>
+      <div class="step"><div class="step-n">7</div><div>Teilen Sie die Tabelle mit der E-Mail Ihrer Frau (Bearbeiter-Zugriff)</div></div>
+      <div class="step"><div class="step-n">8</div><div>Füllen Sie die Felder oben aus und klicken Sie „Einrichtung abschließen" — Google fragt nach Berechtigung → Zulassen</div></div>
+    </div>
   </div>
 </div>
 
-<!-- MAIN APP (shown when configured) -->
+<!-- ══ MAIN APP ══ -->
 <div id="mainApp" style="display:none">
-  <div class="app-header">
-    <div class="header-top">
-      <span class="app-title">🎁 Gutscheine</span>
-      <div class="header-actions">
-        <button class="icon-btn" onclick="syncNow()" title="Synchronisieren">↻</button>
-        <button class="icon-btn" onclick="openSettings()" title="Einstellungen">⚙</button>
+
+  <div class="header">
+    <div class="header-inner">
+      <div class="header-top">
+        <span class="app-title">🎁 Gutscheine</span>
+        <div class="header-btns">
+          <button class="hbtn" onclick="syncNow()" title="Aktualisieren">↻</button>
+          <button class="hbtn" onclick="openSettings()" title="Einstellungen">⚙</button>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="stat-val" id="sTotal">—</span><span class="stat-lbl">Gesamtwert</span></div>
+        <div class="stat s-warn"><span class="stat-val" id="sExpiring">—</span><span class="stat-lbl">Bald ablaufend</span></div>
+        <div class="stat s-danger"><span class="stat-val" id="sExpired">—</span><span class="stat-lbl">Abgelaufen</span></div>
       </div>
     </div>
-    <div class="summary-row" id="summaryRow">
-      <div class="sum-item"><span class="sum-val" id="sumTotal">—</span><span class="sum-lbl">Gesamtwert</span></div>
-      <div class="sum-item warn"><span class="sum-val" id="sumExpiring">—</span><span class="sum-lbl">Bald ablaufend</span></div>
-      <div class="sum-item danger"><span class="sum-val" id="sumExpired">—</span><span class="sum-lbl">Abgelaufen</span></div>
+  </div>
+
+  <div class="controls">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Shop suchen…" oninput="render()">
+    </div>
+    <div class="tabs">
+      <button class="tab active" id="tabActive" onclick="switchTab('active')">Aktiv</button>
+      <button class="tab" id="tabArchive" onclick="switchTab('archive')">Archiv</button>
     </div>
   </div>
 
-  <div id="statusBar" class="status-bar" style="display:none">
-    <div class="status-dot dot-loading" id="statusDot"></div>
-    <span id="statusText">Lade…</span>
-  </div>
-
-  <div class="search-wrap">
-    <input type="text" class="search-input" id="searchInput" placeholder="Shop suchen…" oninput="render()">
-  </div>
-
-  <div class="tabs" style="padding: 10px 16px 0">
-    <button class="tab active" id="tabActive" onclick="switchTab('active')">Aktiv</button>
-    <button class="tab" id="tabArchive" onclick="switchTab('archive')">Archiv</button>
+  <div class="status-bar" id="statusBar">
+    <div class="sdot sdot-load" id="sdot"></div>
+    <span id="statusTxt">Lade…</span>
   </div>
 
   <div class="content" id="mainContent"></div>
 </div>
 
-<!-- FAB -->
-<button class="fab" id="fabBtn" onclick="openModal()" style="display:none">+</button>
+<button class="fab" id="fab" onclick="openModal()">+</button>
 
-<!-- VOUCHER MODAL -->
-<div class="overlay" id="voucherOverlay" onclick="closeOverlayOutside(event,'voucherOverlay')">
+<!-- ══ VOUCHER MODAL ══ -->
+<div class="overlay" id="vOverlay" onclick="closeOuter(event,'vOverlay')">
   <div class="modal">
-    <div class="modal-handle"></div>
-    <h2 id="vModalTitle">Gutschein hinzufügen</h2>
-    <input type="hidden" id="vEditId">
+    <div class="drag-handle"></div>
+    <h2 id="vTitle">Gutschein hinzufügen</h2>
+    <input type="hidden" id="vRowId">
 
-    <div class="form-group">
-      <label>Shop / Anbieter *</label>
-      <input type="text" id="vShop" placeholder="z.B. Kaufland, Amazon…" list="shopDatalist">
-      <datalist id="shopDatalist"></datalist>
+    <div class="fg">
+      <label>Shop *</label>
+      <input type="text" id="vShop" placeholder="z.B. Kaufland, Amazon…" list="shopDL">
+      <datalist id="shopDL"></datalist>
     </div>
 
     <div class="row2">
-      <div class="form-group">
+      <div class="fg">
         <label>Originalwert (€) *</label>
-        <input type="number" id="vOriginal" min="0" step="0.01" placeholder="50.00" inputmode="decimal">
+        <input type="number" id="vOrig" min="0" step="0.01" inputmode="decimal" placeholder="50.00">
       </div>
-      <div class="form-group">
+      <div class="fg">
         <label>Restwert (€) *</label>
-        <input type="number" id="vRest" min="0" step="0.01" placeholder="50.00" inputmode="decimal">
+        <input type="number" id="vRest" min="0" step="0.01" inputmode="decimal" placeholder="50.00">
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="fg">
       <label>Ablaufdatum</label>
       <input type="date" id="vExpiry">
     </div>
 
-    <div class="form-group">
+    <div class="fg">
       <label>Code / Nummer</label>
       <input type="text" id="vCode" placeholder="Optional">
     </div>
 
-    <div class="form-group">
+    <div class="fg">
       <label>Notiz</label>
       <input type="text" id="vNote" placeholder="z.B. Nur online einlösbar">
     </div>
 
-    <div class="form-group">
-      <label>PDF Gutschein</label>
-      <div id="pdfUploadArea" onclick="document.getElementById('pdfFileInput').click()" style="
-        border: 2px dashed var(--border);
-        border-radius: 9px;
-        padding: 16px;
-        text-align: center;
-        cursor: pointer;
-        transition: border-color 0.2s, background 0.2s;
-        background: var(--surface2);
-      " onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div id="pdfUploadLabel" style="font-size:0.88rem;color:var(--text-muted)">📄 PDF auswählen oder hierher ziehen</div>
-        <input type="file" id="pdfFileInput" accept="application/pdf" style="display:none" onchange="handlePdfSelect(event)">
-      </div>
-      <input type="hidden" id="vPdf">
+    <div class="fg">
+      <label>PDF-Link (Google Drive)</label>
+      <input type="url" id="vPdf" placeholder="https://drive.google.com/file/d/…">
+      <div class="hint" style="margin-top:5px">PDF in Drive hochladen → Rechtsklick → „Link kopieren"</div>
     </div>
 
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeOverlay('voucherOverlay')">Abbrechen</button>
-      <button class="btn-main" onclick="saveVoucher()">Speichern</button>
+    <div class="mfooter">
+      <button class="mbtn-cancel" onclick="closeOverlay('vOverlay')">Abbrechen</button>
+      <button class="mbtn" onclick="saveVoucher()">Speichern</button>
     </div>
   </div>
 </div>
 
-<!-- PASSWORD MODAL -->
-<div class="overlay" id="pwOverlay" onclick="closeOverlayOutside(event,'pwOverlay')">
+<!-- ══ PASSWORD MODAL ══ -->
+<div class="overlay" id="pwOverlay" onclick="closeOuter(event,'pwOverlay')">
   <div class="modal">
-    <div class="modal-handle"></div>
+    <div class="drag-handle"></div>
     <h2>Endgültig löschen</h2>
-    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:16px">Geben Sie das Passwort ein um diesen Gutschein dauerhaft zu löschen.</p>
-    <div class="form-group">
+    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:16px">Passwort eingeben um diesen Gutschein dauerhaft zu löschen.</p>
+    <div class="fg">
       <label>Passwort</label>
       <input type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')confirmDelete()">
     </div>
-    <div id="pwError" style="color:var(--danger);font-size:0.82rem;margin-top:-8px;margin-bottom:10px;display:none">Falsches Passwort</div>
-    <input type="hidden" id="deleteTargetId">
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeOverlay('pwOverlay')">Abbrechen</button>
-      <button class="btn-main" style="background:var(--danger)" onclick="confirmDelete()">Löschen</button>
+    <div id="pwErr" style="color:var(--danger);font-size:0.8rem;margin-top:-8px;margin-bottom:8px;display:none">Falsches Passwort</div>
+    <input type="hidden" id="delRowId">
+    <div class="mfooter">
+      <button class="mbtn-cancel" onclick="closeOverlay('pwOverlay')">Abbrechen</button>
+      <button class="mbtn" style="background:var(--danger);color:#fff" onclick="confirmDelete()">Löschen</button>
     </div>
   </div>
 </div>
 
-<!-- SETTINGS MODAL -->
-<div class="overlay" id="settingsOverlay" onclick="closeOverlayOutside(event,'settingsOverlay')">
+<!-- ══ SETTINGS MODAL ══ -->
+<div class="overlay" id="stOverlay" onclick="closeOuter(event,'stOverlay')">
   <div class="modal">
-    <div class="modal-handle"></div>
+    <div class="drag-handle"></div>
     <h2>Einstellungen</h2>
-    <div class="setup-field">
-      <label>Client ID</label>
-      <input type="text" id="sCfgClientId">
-    </div>
-    <div class="setup-field">
-      <label>API Key</label>
-      <input type="text" id="sCfgApiKey">
-    </div>
-    <div class="setup-field">
-      <label>Datei-ID</label>
-      <input type="text" id="sCfgFileId">
-    </div>
-    <div class="setup-field">
-      <label>Lösch-Passwort ändern</label>
-      <input type="password" id="sCfgPassword" placeholder="Leer lassen = nicht ändern">
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeOverlay('settingsOverlay')">Abbrechen</button>
-      <button class="btn-main" onclick="saveSettings()">Speichern</button>
+    <div class="sfield"><label>Client ID</label><input type="text" id="sCid"></div>
+    <div class="sfield"><label>API Key</label><input type="text" id="sApi"></div>
+    <div class="sfield"><label>Spreadsheet ID</label><input type="text" id="sSid"></div>
+    <div class="sfield"><label>Lösch-Passwort ändern</label><input type="password" id="sPw" placeholder="Leer = nicht ändern"></div>
+    <div class="mfooter">
+      <button class="mbtn-cancel" onclick="closeOverlay('stOverlay')">Abbrechen</button>
+      <button class="mbtn" onclick="saveSettings()">Speichern</button>
     </div>
   </div>
 </div>
 
 <script>
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
-const CFG_KEY = 'gutscheine_cfg';
+// ══ CONFIG ══════════════════════════════════════════════════════════════════
+const CFG_KEY = 'gutscheine_v2_cfg';
+const SHEET_NAME = 'Gutscheine';
+const COLS = ['id','shop','original','rest','expiry','code','note','pdf','archived'];
 
-function loadConfig() {
+function getCfg() {
   try { return JSON.parse(localStorage.getItem(CFG_KEY)) || null; }
   catch { return null; }
 }
 
 function saveConfig() {
-  const cfg = {
+  const c = {
     clientId: document.getElementById('cfgClientId').value.trim(),
     apiKey:   document.getElementById('cfgApiKey').value.trim(),
-    fileId:   document.getElementById('cfgFileId').value.trim(),
+    sheetId:  document.getElementById('cfgSheetId').value.trim(),
     password: document.getElementById('cfgPassword').value,
   };
-  if (!cfg.clientId || !cfg.apiKey || !cfg.fileId || !cfg.password) {
+  if (!c.clientId || !c.apiKey || !c.sheetId || !c.password) {
     alert('Bitte alle Felder ausfüllen!'); return;
   }
-  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  localStorage.setItem(CFG_KEY, JSON.stringify(c));
   location.reload();
 }
 
 function saveSettings() {
-  const cfg = loadConfig() || {};
-  cfg.clientId = document.getElementById('sCfgClientId').value.trim();
-  cfg.apiKey   = document.getElementById('sCfgApiKey').value.trim();
-  cfg.fileId   = document.getElementById('sCfgFileId').value.trim();
-  const pw = document.getElementById('sCfgPassword').value;
-  if (pw) cfg.password = pw;
-  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-  closeOverlay('settingsOverlay');
+  const c = getCfg() || {};
+  c.clientId = document.getElementById('sCid').value.trim();
+  c.apiKey   = document.getElementById('sApi').value.trim();
+  c.sheetId  = document.getElementById('sSid').value.trim();
+  const pw = document.getElementById('sPw').value;
+  if (pw) c.password = pw;
+  localStorage.setItem(CFG_KEY, JSON.stringify(c));
+  closeOverlay('stOverlay');
   syncNow();
 }
 
 function openSettings() {
-  const cfg = loadConfig() || {};
-  document.getElementById('sCfgClientId').value = cfg.clientId || '';
-  document.getElementById('sCfgApiKey').value   = cfg.apiKey || '';
-  document.getElementById('sCfgFileId').value   = cfg.fileId || '';
-  document.getElementById('sCfgPassword').value = '';
-  openOverlay('settingsOverlay');
+  const c = getCfg() || {};
+  document.getElementById('sCid').value = c.clientId || '';
+  document.getElementById('sApi').value = c.apiKey || '';
+  document.getElementById('sSid').value = c.sheetId || '';
+  document.getElementById('sPw').value = '';
+  openOverlay('stOverlay');
 }
 
-// ─── GOOGLE API ───────────────────────────────────────────────────────────────
-let gapi_ready = false;
-let tokenClient = null;
+// ══ GOOGLE AUTH ═════════════════════════════════════════════════════════════
 let accessToken = null;
-const cfg = loadConfig();
+let tokenClient = null;
+const cfg = getCfg();
 
-function initGoogleApi() {
-  if (!cfg) return;
-  const script1 = document.createElement('script');
-  script1.src = 'https://apis.google.com/js/api.js';
-  script1.onload = () => {
+function initGoogle() {
+  // Load GAPI
+  const s1 = document.createElement('script');
+  s1.src = 'https://apis.google.com/js/api.js';
+  s1.onload = () => {
     gapi.load('client', async () => {
-      await gapi.client.init({ apiKey: cfg.apiKey, discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'] });
-      gapi_ready = true;
-      initGsi();
+      await gapi.client.init({
+        apiKey: cfg.apiKey,
+        discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+      });
+      loadGsi();
     });
   };
-  document.head.appendChild(script1);
+  document.head.appendChild(s1);
 }
 
-function initGsi() {
-  const script2 = document.createElement('script');
-  script2.src = 'https://accounts.google.com/gsi/client';
-  script2.onload = () => {
+function loadGsi() {
+  const s2 = document.createElement('script');
+  s2.src = 'https://accounts.google.com/gsi/client';
+  s2.onload = () => {
     tokenClient = google.accounts.oauth2.initTokenClient({
       client_id: cfg.clientId,
-      scope: 'https://www.googleapis.com/auth/drive',
-      ux_mode: 'redirect',
-      redirect_uri: window.location.href.split('?')[0],
+      scope: 'https://www.googleapis.com/auth/spreadsheets',
       callback: (resp) => {
-        if (resp.error) { showStatus('Anmeldung fehlgeschlagen', 'error'); return; }
+        if (resp.error) { showStatus('Anmeldung fehlgeschlagen', 'err'); return; }
         accessToken = resp.access_token;
         gapi.client.setToken({ access_token: accessToken });
         loadData();
       },
     });
-
-    // Check if we're returning from a redirect with a token
-    const params = new URLSearchParams(window.location.hash.replace('#','?'));
-    const hashToken = params.get('access_token');
-    if (hashToken) {
-      accessToken = hashToken;
-      gapi.client.setToken({ access_token: hashToken });
-      // Clean up URL
-      history.replaceState(null, '', window.location.pathname);
-      loadData();
-    } else {
-      tokenClient.requestAccessToken({ prompt: '' });
-    }
+    tokenClient.requestAccessToken({ prompt: '' });
   };
-  document.head.appendChild(script2);
+  document.head.appendChild(s2);
 }
 
-// ─── DATA ─────────────────────────────────────────────────────────────────────
+// ══ SHEET DATA ══════════════════════════════════════════════════════════════
 let vouchers = [];
 let currentTab = 'active';
 
-async function loadData() {
-  showStatus('Lade Daten…', 'loading');
+async function ensureHeaders() {
+  // Check if header row exists
   try {
-    const resp = await gapi.client.drive.files.get({
-      fileId: cfg.fileId,
-      alt: 'media',
+    const resp = await gapi.client.sheets.spreadsheets.values.get({
+      spreadsheetId: cfg.sheetId,
+      range: `${SHEET_NAME}!A1:I1`,
     });
-    vouchers = JSON.parse(resp.body) || [];
+    const vals = resp.result.values;
+    if (!vals || vals[0][0] !== 'id') {
+      // Write headers
+      await gapi.client.sheets.spreadsheets.values.update({
+        spreadsheetId: cfg.sheetId,
+        range: `${SHEET_NAME}!A1:I1`,
+        valueInputOption: 'RAW',
+        resource: { values: [COLS] },
+      });
+    }
+  } catch(e) {
+    // Sheet tab might not exist — create it
+    await gapi.client.sheets.spreadsheets.batchUpdate({
+      spreadsheetId: cfg.sheetId,
+      resource: { requests: [{ addSheet: { properties: { title: SHEET_NAME } } }] },
+    });
+    await gapi.client.sheets.spreadsheets.values.update({
+      spreadsheetId: cfg.sheetId,
+      range: `${SHEET_NAME}!A1:I1`,
+      valueInputOption: 'RAW',
+      resource: { values: [COLS] },
+    });
+  }
+}
+
+function rowToVoucher(row) {
+  return {
+    id:       row[0] || '',
+    shop:     row[1] || '',
+    original: parseFloat(row[2]) || 0,
+    rest:     parseFloat(row[3]) || 0,
+    expiry:   row[4] || null,
+    code:     row[5] || '',
+    note:     row[6] || '',
+    pdf:      row[7] || null,
+    archived: row[8] === 'true',
+    _row:     null, // filled in after
+  };
+}
+
+function voucherToRow(v) {
+  return [v.id, v.shop, v.original, v.rest, v.expiry || '', v.code || '', v.note || '', v.pdf || '', v.archived ? 'true' : 'false'];
+}
+
+async function loadData() {
+  showStatus('Lade Daten…', 'load');
+  try {
+    await ensureHeaders();
+    const resp = await gapi.client.sheets.spreadsheets.values.get({
+      spreadsheetId: cfg.sheetId,
+      range: `${SHEET_NAME}!A2:I`,
+    });
+    const rows = resp.result.values || [];
+    vouchers = rows.map((row, i) => {
+      const v = rowToVoucher(row);
+      v._row = i + 2; // 1-indexed, row 1 is header
+      return v;
+    }).filter(v => v.id);
     hideStatus();
     render();
-    updateSummary();
-  } catch (e) {
+    updateStats();
+  } catch(e) {
+    console.error('loadData:', e);
     if (e.status === 401) {
       tokenClient.requestAccessToken({ prompt: 'consent' });
     } else {
-      showStatus('Fehler beim Laden — Tippen zum Wiederholen', 'error');
+      showStatus('Fehler beim Laden — tippen zum Wiederholen', 'err');
       document.getElementById('statusBar').onclick = syncNow;
     }
   }
 }
 
-async function saveData() {
-  showStatus('Speichern…', 'loading');
+async function appendVoucher(v) {
+  showStatus('Speichern…', 'load');
   try {
-    const content = JSON.stringify(vouchers, null, 2);
-    const blob = new Blob([content], { type: 'application/json' });
-    const resp = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${cfg.fileId}?uploadType=media`, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: blob,
+    await gapi.client.sheets.spreadsheets.values.append({
+      spreadsheetId: cfg.sheetId,
+      range: `${SHEET_NAME}!A:I`,
+      valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
+      resource: { values: [voucherToRow(v)] },
     });
-    if (!resp.ok) throw new Error('Save failed');
     hideStatus();
-  } catch (e) {
-    showStatus('Fehler beim Speichern!', 'error');
+  } catch(e) {
+    console.error('append:', e);
+    showStatus('Fehler beim Speichern!', 'err');
+  }
+}
+
+async function updateVoucher(v) {
+  showStatus('Speichern…', 'load');
+  try {
+    await gapi.client.sheets.spreadsheets.values.update({
+      spreadsheetId: cfg.sheetId,
+      range: `${SHEET_NAME}!A${v._row}:I${v._row}`,
+      valueInputOption: 'RAW',
+      resource: { values: [voucherToRow(v)] },
+    });
+    hideStatus();
+  } catch(e) {
+    console.error('update:', e);
+    showStatus('Fehler beim Speichern!', 'err');
+  }
+}
+
+async function deleteVoucherRow(v) {
+  showStatus('Löschen…', 'load');
+  try {
+    // Get sheet id (gid) first
+    const meta = await gapi.client.sheets.spreadsheets.get({ spreadsheetId: cfg.sheetId });
+    const sheet = meta.result.sheets.find(s => s.properties.title === SHEET_NAME);
+    const sheetGid = sheet.properties.sheetId;
+
+    await gapi.client.sheets.spreadsheets.batchUpdate({
+      spreadsheetId: cfg.sheetId,
+      resource: {
+        requests: [{
+          deleteDimension: {
+            range: {
+              sheetId: sheetGid,
+              dimension: 'ROWS',
+              startIndex: v._row - 1,
+              endIndex: v._row,
+            }
+          }
+        }]
+      }
+    });
+    hideStatus();
+  } catch(e) {
+    console.error('delete:', e);
+    showStatus('Fehler beim Löschen!', 'err');
   }
 }
 
 function syncNow() { loadData(); }
 
-// ─── STATUS BAR ───────────────────────────────────────────────────────────────
+// ══ STATUS ══════════════════════════════════════════════════════════════════
 function showStatus(msg, type) {
   const bar = document.getElementById('statusBar');
-  const dot = document.getElementById('statusDot');
-  const txt = document.getElementById('statusText');
+  const dot = document.getElementById('sdot');
   bar.style.display = 'flex';
-  txt.textContent = msg;
-  dot.className = 'status-dot ' + (type === 'loading' ? 'dot-loading' : type === 'error' ? 'dot-error' : 'dot-ok');
+  document.getElementById('statusTxt').textContent = msg;
+  dot.className = 'sdot ' + (type==='load' ? 'sdot-load' : type==='err' ? 'sdot-err' : 'sdot-ok');
+}
+function hideStatus() { document.getElementById('statusBar').style.display = 'none'; }
+
+// ══ HELPERS ═════════════════════════════════════════════════════════════════
+function daysLeft(exp) {
+  if (!exp) return null;
+  return Math.ceil((new Date(exp) - new Date()) / 86400000);
 }
 
-function hideStatus() {
-  document.getElementById('statusBar').style.display = 'none';
+function expiryInfo(days, exp) {
+  if (days === null) return { cls:'eb-none', txt:'Kein Ablauf' };
+  if (days < 0)      return { cls:'eb-bad',  txt:'Abgelaufen' };
+  if (days === 0)    return { cls:'eb-bad',  txt:'Heute!' };
+  if (days <= 30)    return { cls:'eb-warn', txt:`Noch ${days} Tage` };
+  return { cls:'eb-ok', txt: new Date(exp).toLocaleDateString('de-DE') };
 }
 
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
-function getDaysLeft(expiry) {
-  if (!expiry) return null;
-  return Math.ceil((new Date(expiry) - new Date()) / 86400000);
-}
+function newId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
 
-function expiryInfo(days, expiry) {
-  if (days === null) return { cls: 'eb-none', label: 'Kein Ablauf' };
-  if (days < 0)      return { cls: 'eb-danger', label: 'Abgelaufen' };
-  if (days === 0)    return { cls: 'eb-danger', label: 'Heute!' };
-  if (days <= 30)    return { cls: 'eb-warn', label: `Noch ${days} Tage` };
-  return { cls: 'eb-ok', label: new Date(expiry).toLocaleDateString('de-DE') };
-}
-
-function newId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-
-// ─── RENDER ───────────────────────────────────────────────────────────────────
+// ══ RENDER ══════════════════════════════════════════════════════════════════
 function switchTab(tab) {
   currentTab = tab;
-  document.getElementById('tabActive').classList.toggle('active', tab === 'active');
-  document.getElementById('tabArchive').classList.toggle('active', tab === 'archive');
+  document.getElementById('tabActive').classList.toggle('active', tab==='active');
+  document.getElementById('tabArchive').classList.toggle('active', tab==='archive');
   render();
 }
 
 function render() {
   const filter = (document.getElementById('searchInput')?.value || '').toLowerCase();
-  const showArchived = currentTab === 'archive';
-
-  const list = vouchers.filter(v =>
-    !!v.archived === showArchived &&
-    v.shop.toLowerCase().includes(filter)
-  );
+  const isArchive = currentTab === 'archive';
 
   // Update datalist
-  const dl = document.getElementById('shopDatalist');
+  const dl = document.getElementById('shopDL');
   if (dl) {
     const shops = [...new Set(vouchers.map(v => v.shop))];
     dl.innerHTML = shops.map(s => `<option value="${s}">`).join('');
   }
 
-  const groups = {};
-  list.forEach(v => {
-    if (!groups[v.shop]) groups[v.shop] = [];
-    groups[v.shop].push(v);
-  });
+  const list = vouchers.filter(v => !!v.archived === isArchive && v.shop.toLowerCase().includes(filter));
 
   const container = document.getElementById('mainContent');
   if (!container) return;
 
-  if (Object.keys(groups).length === 0) {
+  if (list.length === 0) {
     container.innerHTML = `<div class="empty">
-      <div class="empty-icon">${showArchived ? '📦' : '🎫'}</div>
-      <h3>${showArchived ? 'Archiv ist leer' : 'Keine Gutscheine'}</h3>
-      <p>${showArchived ? 'Archivierte Gutscheine erscheinen hier.' : 'Tippen Sie auf + um einen Gutschein hinzuzufügen.'}</p>
+      <div class="empty-icon">${isArchive ? '📦' : '🎫'}</div>
+      <h3>${isArchive ? 'Archiv ist leer' : 'Keine Gutscheine'}</h3>
+      <p style="font-size:0.85rem;margin-top:6px">${isArchive ? 'Archivierte Gutscheine erscheinen hier.' : 'Tippen Sie auf + um loszulegen.'}</p>
     </div>`;
     return;
   }
 
-  container.innerHTML = Object.entries(groups)
-    .sort((a, b) => a[0].localeCompare(b[0]))
-    .map(([shop, items]) => {
-      const totalRest = items.reduce((s, v) => s + (v.rest || 0), 0);
-      const hasExpiring = items.some(v => { const d = getDaysLeft(v.expiry); return d !== null && d >= 0 && d <= 30; });
-      const hasExpired  = items.some(v => { const d = getDaysLeft(v.expiry); return d !== null && d < 0; });
-      const pillCls = hasExpired ? 'pill-danger' : hasExpiring ? 'pill-warn' : 'pill-green';
+  // Group by shop
+  const groups = {};
+  list.forEach(v => { if (!groups[v.shop]) groups[v.shop] = []; groups[v.shop].push(v); });
 
-      return `<div class="shop-group" id="sg_${CSS.escape(shop)}">
-        <div class="shop-header" onclick="toggleGroup('${shop.replace(/'/g,"\\'")}')">
-          <div class="shop-left">
-            <div class="shop-icon">🏪</div>
-            <span class="shop-name">${shop}</span>
+  container.innerHTML = Object.entries(groups)
+    .sort((a,b) => a[0].localeCompare(b[0]))
+    .map(([shop, items]) => {
+      const total = items.reduce((s,v) => s + v.rest, 0);
+      const hasExpired  = items.some(v => { const d=daysLeft(v.expiry); return d!==null && d<0; });
+      const hasExpiring = items.some(v => { const d=daysLeft(v.expiry); return d!==null && d>=0 && d<=30; });
+      const pillCls = hasExpired ? 'pill-d' : hasExpiring ? 'pill-w' : 'pill-g';
+
+      return `<div class="shop-group" id="sg_${shop.replace(/\W/g,'_')}">
+        <div class="shop-head" onclick="toggleGroup('${shop.replace(/'/g,"\\'")}')">
+          <div class="shop-emoji">🏪</div>
+          <span class="shop-name">${shop}</span>
+          <div class="shop-pills">
+            <span class="pill ${pillCls}">${total.toFixed(2)} €</span>
+            <span class="pill pill-n">${items.length}×</span>
           </div>
-          <div class="shop-right">
-            <span class="pill ${pillCls}">${totalRest.toFixed(2)} €</span>
-            <span class="pill pill-gray">${items.length}×</span>
-            <span class="chevron">▼</span>
-          </div>
+          <span class="chev">▼</span>
         </div>
-        <div class="shop-cards">${items.map(v => cardHtml(v)).join('')}</div>
+        <div class="shop-cards">${items.map(cardHtml).join('')}</div>
       </div>`;
     }).join('');
 }
 
 function cardHtml(v) {
-  const days = getDaysLeft(v.expiry);
+  const days = daysLeft(v.expiry);
   const ei = expiryInfo(days, v.expiry);
   const pct = v.original > 0 ? (v.rest / v.original) * 100 : 0;
-  const fillCls = pct > 50 ? '' : pct > 20 ? 'pct-low' : 'pct-vlow';
-  const cardCls = v.archived ? 'archived-card' : (days !== null && days < 0 ? 'expired-card' : days !== null && days <= 30 ? 'expiring' : '');
+  const fillCls = pct > 50 ? '' : pct > 20 ? 'p-mid' : 'p-low';
+  const cardCls = v.archived ? 'vc-archived' : days !== null && days < 0 ? 'vc-expired' : days !== null && days <= 30 ? 'vc-expiring' : '';
 
-  const activeActions = `
-    <button class="act-btn" onclick="openModal('${v.id}')">✏️ Bearbeiten</button>
-    <button class="act-btn danger" onclick="archiveVoucher('${v.id}')">📦 Archivieren</button>`;
+  const activeActs = `
+    <button class="abtn" onclick="openModal('${v.id}')">✏️ Bearbeiten</button>
+    <button class="abtn" onclick="archiveV('${v.id}')">📦 Archivieren</button>`;
 
-  const archiveActions = `
-    <button class="act-btn restore" onclick="restoreVoucher('${v.id}')">↩ Wiederherstellen</button>
-    <button class="act-btn danger" onclick="askDelete('${v.id}')">🗑 Löschen</button>`;
+  const archiveActs = `
+    <button class="abtn" onclick="restoreV('${v.id}')">↩ Wiederherstellen</button>
+    <button class="abtn red" onclick="askDelete('${v.id}')">🗑 Löschen</button>`;
 
   return `<div class="vcard ${cardCls}" id="vc_${v.id}">
     <div class="vcard-top">
       <div>
-        <div class="vcard-value">${v.rest.toFixed(2)} <span class="currency">€</span></div>
-        <div class="vcard-of">${v.rest === v.original ? 'Voller Wert' : `von ${v.original.toFixed(2)} €`}</div>
+        <div class="vcard-amount">${v.rest.toFixed(2)} <span class="eur">€</span></div>
+        <div class="vcard-of">${v.rest===v.original ? 'Voller Wert' : `von ${v.original.toFixed(2)} €`}</div>
       </div>
-      <span class="expiry-badge ${ei.cls}">${ei.label}</span>
+      <span class="exp-badge ${ei.cls}">${ei.txt}</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill ${fillCls}" style="width:${pct}%"></div></div>
-    <div class="vcard-meta">
-      ${v.code ? `<span class="meta-chip"># ${v.code}</span>` : ''}
-    </div>
+    <div class="pbar"><div class="pfill ${fillCls}" style="width:${pct}%"></div></div>
+    ${v.code ? `<div class="vcard-chips"><span class="chip"># ${v.code}</span></div>` : ''}
     ${v.note ? `<div class="vcard-note">💬 ${v.note}</div>` : ''}
     <div class="vcard-actions">
-      ${v.pdf ? `<a class="act-btn" href="${v.pdf}" target="_blank" style="text-decoration:none;text-align:center">📄 PDF öffnen</a>` : ''}
-      ${v.archived ? archiveActions : activeActions}
+      ${v.pdf ? `<a class="abtn" href="${v.pdf}" target="_blank">📄 PDF</a>` : ''}
+      ${v.archived ? archiveActs : activeActs}
     </div>
   </div>`;
 }
 
 function toggleGroup(shop) {
-  const el = document.getElementById(`sg_${CSS.escape(shop)}`);
-  if (el) el.classList.toggle('collapsed');
+  document.getElementById(`sg_${shop.replace(/\W/g,'_')}`)?.classList.toggle('collapsed');
 }
 
-// ─── SUMMARY ──────────────────────────────────────────────────────────────────
-function updateSummary() {
+// ══ STATS ════════════════════════════════════════════════════════════════════
+function updateStats() {
   const active = vouchers.filter(v => !v.archived);
-  const total = active.reduce((s, v) => s + (v.rest || 0), 0);
-  const expiring = active.filter(v => { const d = getDaysLeft(v.expiry); return d !== null && d >= 0 && d <= 30; }).length;
-  const expired  = active.filter(v => { const d = getDaysLeft(v.expiry); return d !== null && d < 0; }).length;
-  document.getElementById('sumTotal').textContent    = total.toFixed(2) + ' €';
-  document.getElementById('sumExpiring').textContent = expiring;
-  document.getElementById('sumExpired').textContent  = expired;
+  const total    = active.reduce((s,v) => s+v.rest, 0);
+  const expiring = active.filter(v => { const d=daysLeft(v.expiry); return d!==null&&d>=0&&d<=30; }).length;
+  const expired  = active.filter(v => { const d=daysLeft(v.expiry); return d!==null&&d<0; }).length;
+  document.getElementById('sTotal').textContent    = total.toFixed(2)+' €';
+  document.getElementById('sExpiring').textContent = expiring;
+  document.getElementById('sExpired').textContent  = expired;
 }
 
-// ─── VOUCHER CRUD ─────────────────────────────────────────────────────────────
+// ══ CRUD ═════════════════════════════════════════════════════════════════════
 function openModal(id) {
-  document.getElementById('vModalTitle').textContent = id ? 'Bearbeiten' : 'Gutschein hinzufügen';
-  document.getElementById('vEditId').value = id || '';
-  pendingPdfFile = null;
-  document.getElementById('pdfFileInput').value = '';
-
-  if (id) {
-    const v = vouchers.find(x => x.id === id);
-    if (!v) return;
-    document.getElementById('vShop').value     = v.shop;
-    document.getElementById('vOriginal').value = v.original;
-    document.getElementById('vRest').value     = v.rest;
-    document.getElementById('vExpiry').value   = v.expiry || '';
-    document.getElementById('vCode').value     = v.code || '';
-    document.getElementById('vNote').value     = v.note || '';
-    document.getElementById('vPdf').value      = v.pdf || '';
-    document.getElementById('pdfUploadLabel').innerHTML = v.pdf
-      ? `✅ <strong>PDF bereits verknüpft</strong> <span style="color:var(--text-muted);font-size:0.8rem">— neues PDF auswählen um zu ersetzen</span>`
-      : `📄 PDF auswählen oder hierher ziehen`;
-  } else {
-    ['vShop','vOriginal','vRest','vExpiry','vCode','vNote','vPdf'].forEach(i => document.getElementById(i).value = '');
-    document.getElementById('pdfUploadLabel').innerHTML = `📄 PDF auswählen oder hierher ziehen`;
-  }
-  openOverlay('voucherOverlay');
+  const v = id ? vouchers.find(x => x.id===id) : null;
+  document.getElementById('vTitle').textContent = v ? 'Bearbeiten' : 'Gutschein hinzufügen';
+  document.getElementById('vRowId').value = id || '';
+  document.getElementById('vShop').value   = v?.shop || '';
+  document.getElementById('vOrig').value   = v?.original || '';
+  document.getElementById('vRest').value   = v?.rest || '';
+  document.getElementById('vExpiry').value = v?.expiry || '';
+  document.getElementById('vCode').value   = v?.code || '';
+  document.getElementById('vNote').value   = v?.note || '';
+  document.getElementById('vPdf').value    = v?.pdf || '';
+  openOverlay('vOverlay');
 }
 
 async function saveVoucher() {
-  const shop     = document.getElementById('vShop').value.trim();
-  const original = parseFloat(document.getElementById('vOriginal').value);
-  const rest     = parseFloat(document.getElementById('vRest').value);
-  if (!shop || isNaN(original) || isNaN(rest)) { alert('Bitte Shop, Original- und Restwert ausfüllen!'); return; }
+  const shop = document.getElementById('vShop').value.trim();
+  const orig = parseFloat(document.getElementById('vOrig').value);
+  const rest = parseFloat(document.getElementById('vRest').value);
+  if (!shop || isNaN(orig) || isNaN(rest)) { alert('Bitte Shop, Original- und Restwert ausfüllen!'); return; }
 
-  // Upload PDF first if a new file was selected
-  let pdfUrl = document.getElementById('vPdf').value.trim() || null;
-  if (pendingPdfFile) {
-    try {
-      pdfUrl = await uploadPdfToDrive(pendingPdfFile);
-      pendingPdfFile = null;
-    } catch (e) {
-      alert('PDF-Upload fehlgeschlagen. Gutschein wird ohne PDF gespeichert.');
-      pdfUrl = null;
-    }
-  }
-
-  const id = document.getElementById('vEditId').value;
+  const id = document.getElementById('vRowId').value;
   const data = {
-    shop, original, rest,
+    shop, original: orig, rest,
     expiry: document.getElementById('vExpiry').value || null,
     code:   document.getElementById('vCode').value.trim(),
     note:   document.getElementById('vNote').value.trim(),
-    pdf:    pdfUrl,
+    pdf:    document.getElementById('vPdf').value.trim() || null,
+    archived: false,
   };
 
+  closeOverlay('vOverlay');
+
   if (id) {
-    const idx = vouchers.findIndex(v => v.id === id);
-    vouchers[idx] = { ...vouchers[idx], ...data };
+    const v = vouchers.find(x => x.id===id);
+    Object.assign(v, data);
+    await updateVoucher(v);
   } else {
-    vouchers.push({ id: newId(), archived: false, ...data });
+    const v = { id: newId(), _row: null, ...data };
+    await appendVoucher(v);
   }
-
-  closeOverlay('voucherOverlay');
-  render(); updateSummary();
-  await saveData();
+  await loadData();
 }
 
-async function archiveVoucher(id) {
-  const v = vouchers.find(x => x.id === id);
-  if (!v) return;
+async function archiveV(id) {
+  const v = vouchers.find(x => x.id===id);
   v.archived = true;
-  render(); updateSummary();
-  await saveData();
+  await updateVoucher(v);
+  await loadData();
 }
 
-async function restoreVoucher(id) {
-  const v = vouchers.find(x => x.id === id);
-  if (!v) return;
+async function restoreV(id) {
+  const v = vouchers.find(x => x.id===id);
   v.archived = false;
-  render(); updateSummary();
-  await saveData();
+  await updateVoucher(v);
+  await loadData();
 }
 
 function askDelete(id) {
-  document.getElementById('deleteTargetId').value = id;
+  document.getElementById('delRowId').value = id;
   document.getElementById('pwInput').value = '';
-  document.getElementById('pwError').style.display = 'none';
+  document.getElementById('pwErr').style.display = 'none';
   openOverlay('pwOverlay');
   setTimeout(() => document.getElementById('pwInput').focus(), 300);
 }
 
 async function confirmDelete() {
   const pw = document.getElementById('pwInput').value;
-  if (pw !== cfg.password) {
-    document.getElementById('pwError').style.display = 'block';
+  if (pw !== getCfg().password) {
+    document.getElementById('pwErr').style.display = 'block';
     return;
   }
-  const id = document.getElementById('deleteTargetId').value;
-  vouchers = vouchers.filter(v => v.id !== id);
+  const id = document.getElementById('delRowId').value;
+  const v = vouchers.find(x => x.id===id);
   closeOverlay('pwOverlay');
-  render(); updateSummary();
-  await saveData();
+  await deleteVoucherRow(v);
+  await loadData();
 }
 
-// ─── PDF UPLOAD ───────────────────────────────────────────────────────────────
-let pendingPdfFile = null;
-
-function handlePdfSelect(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  pendingPdfFile = file;
-  document.getElementById('pdfUploadLabel').innerHTML =
-    `✅ <strong>${file.name}</strong> <span style="color:var(--text-muted);font-size:0.8rem">(${(file.size/1024).toFixed(0)} KB) — wird beim Speichern hochgeladen</span>`;
-}
-
-async function uploadPdfToDrive(file) {
-  showStatus('PDF wird hochgeladen…', 'loading');
-  const metadata = {
-    name: file.name,
-    mimeType: 'application/pdf',
-    // Upload into same folder as gutscheine.json
-  };
-
-  const form = new FormData();
-  form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-  form.append('file', file);
-
-  const resp = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${accessToken}` },
-    body: form,
-  });
-
-  if (!resp.ok) throw new Error('PDF upload failed');
-  const data = await resp.json();
-
-  // Make file readable by anyone with the link
-  await fetch(`https://www.googleapis.com/drive/v3/files/${data.id}/permissions`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ role: 'reader', type: 'anyone' }),
-  });
-
-  return data.webViewLink;
-}
-
-// ─── OVERLAY HELPERS ──────────────────────────────────────────────────────────
+// ══ OVERLAYS ═════════════════════════════════════════════════════════════════
 function openOverlay(id)  { document.getElementById(id).classList.add('open'); }
 function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
-function closeOverlayOutside(e, id) { if (e.target.id === id) closeOverlay(id); }
+function closeOuter(e,id) { if (e.target.id===id) closeOverlay(id); }
 
-// ─── BOOT ─────────────────────────────────────────────────────────────────────
+// ══ BOOT ═════════════════════════════════════════════════════════════════════
 (function boot() {
   if (!cfg) {
     document.getElementById('setupScreen').style.display = 'block';
   } else {
     document.getElementById('mainApp').style.display = 'block';
-    document.getElementById('fabBtn').style.display = 'flex';
-    initGoogleApi();
+    document.getElementById('fab').style.display = 'flex';
+    initGoogle();
   }
 })();
 </script>
