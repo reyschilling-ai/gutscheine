@@ -918,7 +918,7 @@ function initGsi() {
   script2.onload = () => {
     tokenClient = google.accounts.oauth2.initTokenClient({
       client_id: cfg.clientId,
-      scope: 'https://www.googleapis.com/auth/drive.file',
+      scope: 'https://www.googleapis.com/auth/drive',
       callback: (resp) => {
         if (resp.error) { showStatus('Anmeldung fehlgeschlagen', 'error'); return; }
         accessToken = resp.access_token;
