@@ -919,6 +919,8 @@ function initGsi() {
     tokenClient = google.accounts.oauth2.initTokenClient({
       client_id: cfg.clientId,
       scope: 'https://www.googleapis.com/auth/drive',
+      ux_mode: 'redirect',
+      redirect_uri: window.location.href.split('?')[0],
       callback: (resp) => {
         if (resp.error) { showStatus('Anmeldung fehlgeschlagen', 'error'); return; }
         accessToken = resp.access_token;
@@ -926,8 +928,19 @@ function initGsi() {
         loadData();
       },
     });
-    // Try silent token first
-    tokenClient.requestAccessToken({ prompt: '' });
+
+    // Check if we're returning from a redirect with a token
+    const params = new URLSearchParams(window.location.hash.replace('#','?'));
+    const hashToken = params.get('access_token');
+    if (hashToken) {
+      accessToken = hashToken;
+      gapi.client.setToken({ access_token: hashToken });
+      // Clean up URL
+      history.replaceState(null, '', window.location.pathname);
+      loadData();
+    } else {
+      tokenClient.requestAccessToken({ prompt: '' });
+    }
   };
   document.head.appendChild(script2);
 }
