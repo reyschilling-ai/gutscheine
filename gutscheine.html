@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Gutscheine</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8;
+  --surface: #ffffff;
+  --surface2: #faf7f2;
+  --border: #e2d9cc;
+  --accent: #2d6a4f;
+  --accent-light: #40916c;
+  --accent-pale: #d8f3dc;
+  --text: #1a1a16;
+  --text-muted: #7a7060;
+  --danger: #c0392b;
+  --danger-pale: #fde8e6;
+  --warning: #b7791f;
+  --warning-pale: #fef3cd;
+  --success: #2d6a4f;
+  --radius: 14px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.07);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Karla', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+/* HEADER */
+.app-header {
+  background: var(--accent);
+  color: white;
+  padding: 20px 20px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 16px rgba(45,106,79,0.3);
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.app-title {
+  font-family: 'Lora', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.header-actions { display: flex; gap: 8px; }
+
+.icon-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.2s;
+}
+.icon-btn:hover { background: rgba(255,255,255,0.25); }
+
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.sum-item {
+  background: rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.sum-val {
+  font-family: 'Lora', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  display: block;
+}
+
+.sum-lbl {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-top: 2px;
+}
+
+.sum-item.warn .sum-val { color: #ffd166; }
+.sum-item.danger .sum-val { color: #ff8b80; }
+
+/* SEARCH BAR */
+.search-wrap {
+  padding: 14px 16px 0;
+}
+
+.search-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 16px 11px 40px;
+  font-size: 0.95rem;
+  font-family: 'Karla', sans-serif;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237a7060' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.742 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 14px center;
+}
+
+.search-input:focus { border-color: var(--accent); }
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 0;
+  padding: 14px 16px 0;
+}
+
+.tab {
+  flex: 1;
+  padding: 9px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: 'Karla', sans-serif;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab:first-child { border-radius: 10px 0 0 10px; }
+.tab:last-child { border-radius: 0 10px 10px 0; border-left: none; }
+.tab:not(:first-child):not(:last-child) { border-left: none; }
+
+.tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+
+/* MAIN CONTENT */
+.content { padding: 16px; }
+
+/* SHOP GROUP */
+.shop-group {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.shop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  user-select: none;
+  gap: 10px;
+}
+
+.shop-header:active { background: var(--surface2); }
+
+.shop-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+
+.shop-icon {
+  width: 36px; height: 36px;
+  background: var(--accent-pale);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.shop-name {
+  font-family: 'Lora', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shop-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+.pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.pill-green { background: var(--accent-pale); color: var(--accent); }
+.pill-gray { background: #f0ece4; color: var(--text-muted); }
+.pill-warn { background: var(--warning-pale); color: var(--warning); }
+.pill-danger { background: var(--danger-pale); color: var(--danger); }
+
+.chevron {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  transition: transform 0.2s;
+}
+
+.shop-group.collapsed .chevron { transform: rotate(-90deg); }
+.shop-group.collapsed .shop-cards { display: none; }
+
+.shop-cards {
+  border-top: 1.5px solid var(--border);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* VOUCHER CARD */
+.vcard {
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  background: var(--surface2);
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.vcard.expiring { border-color: #f6c453; }
+.vcard.expired-card { border-color: #e8a09a; background: #fff8f7; }
+.vcard.archived-card { opacity: 0.65; }
+
+.vcard-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.vcard-value {
+  font-family: 'Lora', serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text);
+}
+
+.vcard-value .currency { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+
+.vcard-of {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.expiry-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.eb-ok { background: var(--accent-pale); color: var(--accent); }
+.eb-warn { background: var(--warning-pale); color: var(--warning); }
+.eb-danger { background: var(--danger-pale); color: var(--danger); }
+.eb-none { background: #f0ece4; color: var(--text-muted); }
+
+.progress-bar {
+  height: 5px;
+  background: var(--border);
+  border-radius: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 5px;
+  background: var(--accent);
+  transition: width 0.4s;
+}
+.progress-fill.pct-low { background: var(--warning); }
+.progress-fill.pct-vlow { background: var(--danger); }
+
+.vcard-meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.meta-chip {
+  font-size: 0.72rem;
+  background: #f0ece4;
+  color: var(--text-muted);
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-family: monospace;
+}
+
+.vcard-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.vcard-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.act-btn {
+  flex: 1;
+  padding: 7px;
+  border-radius: 7px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-family: 'Karla', sans-serif;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+}
+
+.act-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-pale); }
+.act-btn.danger:hover { border-color: var(--danger); color: var(--danger); background: var(--danger-pale); }
+.act-btn.restore:hover { border-color: var(--accent-light); color: var(--accent-light); background: var(--accent-pale); }
+
+/* FAB */
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  width: 58px; height: 58px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.6rem;
+  box-shadow: 0 4px 20px rgba(45,106,79,0.45);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 40;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.fab:hover { background: var(--accent-light); transform: scale(1.07); }
+.fab:active { transform: scale(0.95); }
+
+/* EMPTY */
+.empty {
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--text-muted);
+}
+.empty-icon { font-size: 2.8rem; margin-bottom: 12px; }
+.empty h3 { font-family: 'Lora', serif; color: var(--text); margin-bottom: 6px; font-size: 1.1rem; }
+.empty p { font-size: 0.85rem; }
+
+/* MODALS */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  padding: 24px 20px 36px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 92vh;
+  overflow-y: auto;
+  animation: slideUp 0.25s ease;
+}
+
+@media (min-width: 540px) {
+  .overlay { align-items: center; padding: 20px; }
+  .modal { border-radius: 20px; max-height: 88vh; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-handle {
+  width: 36px; height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  margin: 0 auto 20px;
+}
+
+@media (min-width: 540px) { .modal-handle { display: none; } }
+
+.modal h2 {
+  font-family: 'Lora', serif;
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.form-group { margin-bottom: 14px; }
+
+.form-group label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-size: 1rem;
+  font-family: 'Karla', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+
+.form-group input:focus { border-color: var(--accent); }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.modal-footer {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.btn-main {
+  flex: 1;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: 'Karla', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-main:hover { background: var(--accent-light); }
+
+.btn-cancel {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 10px;
+  padding: 13px 20px;
+  font-size: 0.95rem;
+  font-family: 'Karla', sans-serif;
+  cursor: pointer;
+}
+
+/* LOADING / ERROR STATES */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-ok { background: var(--accent); }
+.dot-loading { background: var(--warning); animation: pulse 1s infinite; }
+.dot-error { background: var(--danger); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* SETUP SCREEN */
+.setup-screen {
+  padding: 30px 20px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.setup-screen h2 {
+  font-family: 'Lora', serif;
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+.setup-screen p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.setup-field {
+  margin-bottom: 14px;
+}
+
+.setup-field label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.setup-field input {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  padding: 11px 14px;
+  font-size: 0.95rem;
+  font-family: 'Karla', sans-serif;
+  color: var(--text);
+  outline: none;
+}
+
+.setup-field input:focus { border-color: var(--accent); }
+
+.setup-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+.btn-setup {
+  width: 100%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Karla', sans-serif;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.2s;
+}
+
+.btn-setup:hover { background: var(--accent-light); }
+
+.divider {
+  border: none;
+  border-top: 1.5px solid var(--border);
+  margin: 20px 0;
+}
+
+.step-list {
+  list-style: none;
+  counter-reset: steps;
+}
+
+.step-list li {
+  counter-increment: steps;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.step-list li::before {
+  content: counter(steps);
+  background: var(--accent-pale);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.8rem;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.link-btn {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<!-- SETUP SCREEN (shown when not configured) -->
+<div id="setupScreen" style="display:none">
+  <div class="app-header" style="border-radius:0">
+    <div class="header-top">
+      <span class="app-title">🎁 Gutscheine — Einrichtung</span>
+    </div>
+  </div>
+  <div class="setup-screen">
+    <h2>Willkommen!</h2>
+    <p>Bitte geben Sie Ihre Google Drive API-Daten ein. Diese werden nur auf diesem Gerät gespeichert.</p>
+
+    <div class="setup-field">
+      <label>Client ID</label>
+      <input type="text" id="cfgClientId" placeholder="xxxxxxx.apps.googleusercontent.com">
+      <div class="setup-hint">Aus der Google Cloud Console (OAuth 2.0 Client-ID)</div>
+    </div>
+
+    <div class="setup-field">
+      <label>API Key</label>
+      <input type="text" id="cfgApiKey" placeholder="AIzaSy...">
+    </div>
+
+    <div class="setup-field">
+      <label>Datei-ID der gutscheine.json</label>
+      <input type="text" id="cfgFileId" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms">
+      <div class="setup-hint">Die ID aus dem Google Drive Link der JSON-Datei</div>
+    </div>
+
+    <div class="setup-field">
+      <label>Lösch-Passwort</label>
+      <input type="password" id="cfgPassword" placeholder="Sicheres Passwort wählen">
+      <div class="setup-hint">Wird benötigt um Gutscheine endgültig aus dem Archiv zu löschen</div>
+    </div>
+
+    <button class="btn-setup" onclick="saveConfig()">Einrichtung abschließen →</button>
+
+    <hr class="divider">
+
+    <h2 style="font-size:1.1rem;margin-bottom:12px;color:var(--text)">Einrichtungsanleitung</h2>
+    <ol class="step-list">
+      <li>Öffnen Sie <a class="link-btn" href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a> und erstellen Sie ein neues Projekt (z.B. „Gutscheine")</li>
+      <li>Aktivieren Sie die <strong>Google Drive API</strong> unter „APIs & Dienste" → „Bibliothek"</li>
+      <li>Erstellen Sie unter „APIs & Dienste" → „Anmeldedaten" einen <strong>API-Schlüssel</strong> und kopieren Sie ihn oben ein</li>
+      <li>Erstellen Sie eine <strong>OAuth 2.0 Client-ID</strong> (Typ: Webanwendung). Fügen Sie als autorisierte JavaScript-Quelle die URL dieser Datei hinzu (oder <code>https://storage.googleapis.com</code> wenn Sie Google Drive direkt nutzen)</li>
+      <li>Erstellen Sie in Ihrem Google Drive eine leere Datei namens <strong>gutscheine.json</strong> mit dem Inhalt <code>[]</code> und teilen Sie diese Datei mit Ihrer Frau</li>
+      <li>Öffnen Sie die JSON-Datei in Drive, kopieren Sie die <strong>Datei-ID</strong> aus der URL und fügen Sie sie oben ein</li>
+      <li>Wiederholen Sie diese Einrichtung auf dem zweiten Gerät Ihrer Frau — verwenden Sie dieselbe Datei-ID und dasselbe Passwort</li>
+    </ol>
+  </div>
+</div>
+
+<!-- MAIN APP (shown when configured) -->
+<div id="mainApp" style="display:none">
+  <div class="app-header">
+    <div class="header-top">
+      <span class="app-title">🎁 Gutscheine</span>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="syncNow()" title="Synchronisieren">↻</button>
+        <button class="icon-btn" onclick="openSettings()" title="Einstellungen">⚙</button>
+      </div>
+    </div>
+    <div class="summary-row" id="summaryRow">
+      <div class="sum-item"><span class="sum-val" id="sumTotal">—</span><span class="sum-lbl">Gesamtwert</span></div>
+      <div class="sum-item warn"><span class="sum-val" id="sumExpiring">—</span><span class="sum-lbl">Bald ablaufend</span></div>
+      <div class="sum-item danger"><span class="sum-val" id="sumExpired">—</span><span class="sum-lbl">Abgelaufen</span></div>
+    </div>
+  </div>
+
+  <div id="statusBar" class="status-bar" style="display:none">
+    <div class="status-dot dot-loading" id="statusDot"></div>
+    <span id="statusText">Lade…</span>
+  </div>
+
+  <div class="search-wrap">
+    <input type="text" class="search-input" id="searchInput" placeholder="Shop suchen…" oninput="render()">
+  </div>
+
+  <div class="tabs" style="padding: 10px 16px 0">
+    <button class="tab active" id="tabActive" onclick="switchTab('active')">Aktiv</button>
+    <button class="tab" id="tabArchive" onclick="switchTab('archive')">Archiv</button>
+  </div>
+
+  <div class="content" id="mainContent"></div>
+</div>
+
+<!-- FAB -->
+<button class="fab" id="fabBtn" onclick="openModal()" style="display:none">+</button>
+
+<!-- VOUCHER MODAL -->
+<div class="overlay" id="voucherOverlay" onclick="closeOverlayOutside(event,'voucherOverlay')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2 id="vModalTitle">Gutschein hinzufügen</h2>
+    <input type="hidden" id="vEditId">
+
+    <div class="form-group">
+      <label>Shop / Anbieter *</label>
+      <input type="text" id="vShop" placeholder="z.B. Kaufland, Amazon…" list="shopDatalist">
+      <datalist id="shopDatalist"></datalist>
+    </div>
+
+    <div class="row2">
+      <div class="form-group">
+        <label>Originalwert (€) *</label>
+        <input type="number" id="vOriginal" min="0" step="0.01" placeholder="50.00" inputmode="decimal">
+      </div>
+      <div class="form-group">
+        <label>Restwert (€) *</label>
+        <input type="number" id="vRest" min="0" step="0.01" placeholder="50.00" inputmode="decimal">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Ablaufdatum</label>
+      <input type="date" id="vExpiry">
+    </div>
+
+    <div class="form-group">
+      <label>Code / Nummer</label>
+      <input type="text" id="vCode" placeholder="Optional">
+    </div>
+
+    <div class="form-group">
+      <label>Notiz</label>
+      <input type="text" id="vNote" placeholder="z.B. Nur online einlösbar">
+    </div>
+
+    <div class="form-group">
+      <label>PDF Gutschein</label>
+      <div id="pdfUploadArea" onclick="document.getElementById('pdfFileInput').click()" style="
+        border: 2px dashed var(--border);
+        border-radius: 9px;
+        padding: 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.2s, background 0.2s;
+        background: var(--surface2);
+      " onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div id="pdfUploadLabel" style="font-size:0.88rem;color:var(--text-muted)">📄 PDF auswählen oder hierher ziehen</div>
+        <input type="file" id="pdfFileInput" accept="application/pdf" style="display:none" onchange="handlePdfSelect(event)">
+      </div>
+      <input type="hidden" id="vPdf">
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeOverlay('voucherOverlay')">Abbrechen</button>
+      <button class="btn-main" onclick="saveVoucher()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD MODAL -->
+<div class="overlay" id="pwOverlay" onclick="closeOverlayOutside(event,'pwOverlay')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>Endgültig löschen</h2>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:16px">Geben Sie das Passwort ein um diesen Gutschein dauerhaft zu löschen.</p>
+    <div class="form-group">
+      <label>Passwort</label>
+      <input type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')confirmDelete()">
+    </div>
+    <div id="pwError" style="color:var(--danger);font-size:0.82rem;margin-top:-8px;margin-bottom:10px;display:none">Falsches Passwort</div>
+    <input type="hidden" id="deleteTargetId">
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeOverlay('pwOverlay')">Abbrechen</button>
+      <button class="btn-main" style="background:var(--danger)" onclick="confirmDelete()">Löschen</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="overlay" id="settingsOverlay" onclick="closeOverlayOutside(event,'settingsOverlay')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>Einstellungen</h2>
+    <div class="setup-field">
+      <label>Client ID</label>
+      <input type="text" id="sCfgClientId">
+    </div>
+    <div class="setup-field">
+      <label>API Key</label>
+      <input type="text" id="sCfgApiKey">
+    </div>
+    <div class="setup-field">
+      <label>Datei-ID</label>
+      <input type="text" id="sCfgFileId">
+    </div>
+    <div class="setup-field">
+      <label>Lösch-Passwort ändern</label>
+      <input type="password" id="sCfgPassword" placeholder="Leer lassen = nicht ändern">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeOverlay('settingsOverlay')">Abbrechen</button>
+      <button class="btn-main" onclick="saveSettings()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const CFG_KEY = 'gutscheine_cfg';
+
+function loadConfig() {
+  try { return JSON.parse(localStorage.getItem(CFG_KEY)) || null; }
+  catch { return null; }
+}
+
+function saveConfig() {
+  const cfg = {
+    clientId: document.getElementById('cfgClientId').value.trim(),
+    apiKey:   document.getElementById('cfgApiKey').value.trim(),
+    fileId:   document.getElementById('cfgFileId').value.trim(),
+    password: document.getElementById('cfgPassword').value,
+  };
+  if (!cfg.clientId || !cfg.apiKey || !cfg.fileId || !cfg.password) {
+    alert('Bitte alle Felder ausfüllen!'); return;
+  }
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  location.reload();
+}
+
+function saveSettings() {
+  const cfg = loadConfig() || {};
+  cfg.clientId = document.getElementById('sCfgClientId').value.trim();
+  cfg.apiKey   = document.getElementById('sCfgApiKey').value.trim();
+  cfg.fileId   = document.getElementById('sCfgFileId').value.trim();
+  const pw = document.getElementById('sCfgPassword').value;
+  if (pw) cfg.password = pw;
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  closeOverlay('settingsOverlay');
+  syncNow();
+}
+
+function openSettings() {
+  const cfg = loadConfig() || {};
+  document.getElementById('sCfgClientId').value = cfg.clientId || '';
+  document.getElementById('sCfgApiKey').value   = cfg.apiKey || '';
+  document.getElementById('sCfgFileId').value   = cfg.fileId || '';
+  document.getElementById('sCfgPassword').value = '';
+  openOverlay('settingsOverlay');
+}
+
+// ─── GOOGLE API ───────────────────────────────────────────────────────────────
+let gapi_ready = false;
+let tokenClient = null;
+let accessToken = null;
+const cfg = loadConfig();
+
+function initGoogleApi() {
+  if (!cfg) return;
+  const script1 = document.createElement('script');
+  script1.src = 'https://apis.google.com/js/api.js';
+  script1.onload = () => {
+    gapi.load('client', async () => {
+      await gapi.client.init({ apiKey: cfg.apiKey, discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'] });
+      gapi_ready = true;
+      initGsi();
+    });
+  };
+  document.head.appendChild(script1);
+}
+
+function initGsi() {
+  const script2 = document.createElement('script');
+  script2.src = 'https://accounts.google.com/gsi/client';
+  script2.onload = () => {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: cfg.clientId,
+      scope: 'https://www.googleapis.com/auth/drive.file',
+      callback: (resp) => {
+        if (resp.error) { showStatus('Anmeldung fehlgeschlagen', 'error'); return; }
+        accessToken = resp.access_token;
+        gapi.client.setToken({ access_token: accessToken });
+        loadData();
+      },
+    });
+    // Try silent token first
+    tokenClient.requestAccessToken({ prompt: '' });
+  };
+  document.head.appendChild(script2);
+}
+
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+let vouchers = [];
+let currentTab = 'active';
+
+async function loadData() {
+  showStatus('Lade Daten…', 'loading');
+  try {
+    const resp = await gapi.client.drive.files.get({
+      fileId: cfg.fileId,
+      alt: 'media',
+    });
+    vouchers = JSON.parse(resp.body) || [];
+    hideStatus();
+    render();
+    updateSummary();
+  } catch (e) {
+    if (e.status === 401) {
+      tokenClient.requestAccessToken({ prompt: 'consent' });
+    } else {
+      showStatus('Fehler beim Laden — Tippen zum Wiederholen', 'error');
+      document.getElementById('statusBar').onclick = syncNow;
+    }
+  }
+}
+
+async function saveData() {
+  showStatus('Speichern…', 'loading');
+  try {
+    const content = JSON.stringify(vouchers, null, 2);
+    const blob = new Blob([content], { type: 'application/json' });
+    const resp = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${cfg.fileId}?uploadType=media`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: blob,
+    });
+    if (!resp.ok) throw new Error('Save failed');
+    hideStatus();
+  } catch (e) {
+    showStatus('Fehler beim Speichern!', 'error');
+  }
+}
+
+function syncNow() { loadData(); }
+
+// ─── STATUS BAR ───────────────────────────────────────────────────────────────
+function showStatus(msg, type) {
+  const bar = document.getElementById('statusBar');
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+  bar.style.display = 'flex';
+  txt.textContent = msg;
+  dot.className = 'status-dot ' + (type === 'loading' ? 'dot-loading' : type === 'error' ? 'dot-error' : 'dot-ok');
+}
+
+function hideStatus() {
+  document.getElementById('statusBar').style.display = 'none';
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function getDaysLeft(expiry) {
+  if (!expiry) return null;
+  return Math.ceil((new Date(expiry) - new Date()) / 86400000);
+}
+
+function expiryInfo(days, expiry) {
+  if (days === null) return { cls: 'eb-none', label: 'Kein Ablauf' };
+  if (days < 0)      return { cls: 'eb-danger', label: 'Abgelaufen' };
+  if (days === 0)    return { cls: 'eb-danger', label: 'Heute!' };
+  if (days <= 30)    return { cls: 'eb-warn', label: `Noch ${days} Tage` };
+  return { cls: 'eb-ok', label: new Date(expiry).toLocaleDateString('de-DE') };
+}
+
+function newId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tabActive').classList.toggle('active', tab === 'active');
+  document.getElementById('tabArchive').classList.toggle('active', tab === 'archive');
+  render();
+}
+
+function render() {
+  const filter = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  const showArchived = currentTab === 'archive';
+
+  const list = vouchers.filter(v =>
+    !!v.archived === showArchived &&
+    v.shop.toLowerCase().includes(filter)
+  );
+
+  // Update datalist
+  const dl = document.getElementById('shopDatalist');
+  if (dl) {
+    const shops = [...new Set(vouchers.map(v => v.shop))];
+    dl.innerHTML = shops.map(s => `<option value="${s}">`).join('');
+  }
+
+  const groups = {};
+  list.forEach(v => {
+    if (!groups[v.shop]) groups[v.shop] = [];
+    groups[v.shop].push(v);
+  });
+
+  const container = document.getElementById('mainContent');
+  if (!container) return;
+
+  if (Object.keys(groups).length === 0) {
+    container.innerHTML = `<div class="empty">
+      <div class="empty-icon">${showArchived ? '📦' : '🎫'}</div>
+      <h3>${showArchived ? 'Archiv ist leer' : 'Keine Gutscheine'}</h3>
+      <p>${showArchived ? 'Archivierte Gutscheine erscheinen hier.' : 'Tippen Sie auf + um einen Gutschein hinzuzufügen.'}</p>
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = Object.entries(groups)
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([shop, items]) => {
+      const totalRest = items.reduce((s, v) => s + (v.rest || 0), 0);
+      const hasExpiring = items.some(v => { const d = getDaysLeft(v.expiry); return d !== null && d >= 0 && d <= 30; });
+      const hasExpired  = items.some(v => { const d = getDaysLeft(v.expiry); return d !== null && d < 0; });
+      const pillCls = hasExpired ? 'pill-danger' : hasExpiring ? 'pill-warn' : 'pill-green';
+
+      return `<div class="shop-group" id="sg_${CSS.escape(shop)}">
+        <div class="shop-header" onclick="toggleGroup('${shop.replace(/'/g,"\\'")}')">
+          <div class="shop-left">
+            <div class="shop-icon">🏪</div>
+            <span class="shop-name">${shop}</span>
+          </div>
+          <div class="shop-right">
+            <span class="pill ${pillCls}">${totalRest.toFixed(2)} €</span>
+            <span class="pill pill-gray">${items.length}×</span>
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="shop-cards">${items.map(v => cardHtml(v)).join('')}</div>
+      </div>`;
+    }).join('');
+}
+
+function cardHtml(v) {
+  const days = getDaysLeft(v.expiry);
+  const ei = expiryInfo(days, v.expiry);
+  const pct = v.original > 0 ? (v.rest / v.original) * 100 : 0;
+  const fillCls = pct > 50 ? '' : pct > 20 ? 'pct-low' : 'pct-vlow';
+  const cardCls = v.archived ? 'archived-card' : (days !== null && days < 0 ? 'expired-card' : days !== null && days <= 30 ? 'expiring' : '');
+
+  const activeActions = `
+    <button class="act-btn" onclick="openModal('${v.id}')">✏️ Bearbeiten</button>
+    <button class="act-btn danger" onclick="archiveVoucher('${v.id}')">📦 Archivieren</button>`;
+
+  const archiveActions = `
+    <button class="act-btn restore" onclick="restoreVoucher('${v.id}')">↩ Wiederherstellen</button>
+    <button class="act-btn danger" onclick="askDelete('${v.id}')">🗑 Löschen</button>`;
+
+  return `<div class="vcard ${cardCls}" id="vc_${v.id}">
+    <div class="vcard-top">
+      <div>
+        <div class="vcard-value">${v.rest.toFixed(2)} <span class="currency">€</span></div>
+        <div class="vcard-of">${v.rest === v.original ? 'Voller Wert' : `von ${v.original.toFixed(2)} €`}</div>
+      </div>
+      <span class="expiry-badge ${ei.cls}">${ei.label}</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill ${fillCls}" style="width:${pct}%"></div></div>
+    <div class="vcard-meta">
+      ${v.code ? `<span class="meta-chip"># ${v.code}</span>` : ''}
+    </div>
+    ${v.note ? `<div class="vcard-note">💬 ${v.note}</div>` : ''}
+    <div class="vcard-actions">
+      ${v.pdf ? `<a class="act-btn" href="${v.pdf}" target="_blank" style="text-decoration:none;text-align:center">📄 PDF öffnen</a>` : ''}
+      ${v.archived ? archiveActions : activeActions}
+    </div>
+  </div>`;
+}
+
+function toggleGroup(shop) {
+  const el = document.getElementById(`sg_${CSS.escape(shop)}`);
+  if (el) el.classList.toggle('collapsed');
+}
+
+// ─── SUMMARY ──────────────────────────────────────────────────────────────────
+function updateSummary() {
+  const active = vouchers.filter(v => !v.archived);
+  const total = active.reduce((s, v) => s + (v.rest || 0), 0);
+  const expiring = active.filter(v => { const d = getDaysLeft(v.expiry); return d !== null && d >= 0 && d <= 30; }).length;
+  const expired  = active.filter(v => { const d = getDaysLeft(v.expiry); return d !== null && d < 0; }).length;
+  document.getElementById('sumTotal').textContent    = total.toFixed(2) + ' €';
+  document.getElementById('sumExpiring').textContent = expiring;
+  document.getElementById('sumExpired').textContent  = expired;
+}
+
+// ─── VOUCHER CRUD ─────────────────────────────────────────────────────────────
+function openModal(id) {
+  document.getElementById('vModalTitle').textContent = id ? 'Bearbeiten' : 'Gutschein hinzufügen';
+  document.getElementById('vEditId').value = id || '';
+  pendingPdfFile = null;
+  document.getElementById('pdfFileInput').value = '';
+
+  if (id) {
+    const v = vouchers.find(x => x.id === id);
+    if (!v) return;
+    document.getElementById('vShop').value     = v.shop;
+    document.getElementById('vOriginal').value = v.original;
+    document.getElementById('vRest').value     = v.rest;
+    document.getElementById('vExpiry').value   = v.expiry || '';
+    document.getElementById('vCode').value     = v.code || '';
+    document.getElementById('vNote').value     = v.note || '';
+    document.getElementById('vPdf').value      = v.pdf || '';
+    document.getElementById('pdfUploadLabel').innerHTML = v.pdf
+      ? `✅ <strong>PDF bereits verknüpft</strong> <span style="color:var(--text-muted);font-size:0.8rem">— neues PDF auswählen um zu ersetzen</span>`
+      : `📄 PDF auswählen oder hierher ziehen`;
+  } else {
+    ['vShop','vOriginal','vRest','vExpiry','vCode','vNote','vPdf'].forEach(i => document.getElementById(i).value = '');
+    document.getElementById('pdfUploadLabel').innerHTML = `📄 PDF auswählen oder hierher ziehen`;
+  }
+  openOverlay('voucherOverlay');
+}
+
+async function saveVoucher() {
+  const shop     = document.getElementById('vShop').value.trim();
+  const original = parseFloat(document.getElementById('vOriginal').value);
+  const rest     = parseFloat(document.getElementById('vRest').value);
+  if (!shop || isNaN(original) || isNaN(rest)) { alert('Bitte Shop, Original- und Restwert ausfüllen!'); return; }
+
+  // Upload PDF first if a new file was selected
+  let pdfUrl = document.getElementById('vPdf').value.trim() || null;
+  if (pendingPdfFile) {
+    try {
+      pdfUrl = await uploadPdfToDrive(pendingPdfFile);
+      pendingPdfFile = null;
+    } catch (e) {
+      alert('PDF-Upload fehlgeschlagen. Gutschein wird ohne PDF gespeichert.');
+      pdfUrl = null;
+    }
+  }
+
+  const id = document.getElementById('vEditId').value;
+  const data = {
+    shop, original, rest,
+    expiry: document.getElementById('vExpiry').value || null,
+    code:   document.getElementById('vCode').value.trim(),
+    note:   document.getElementById('vNote').value.trim(),
+    pdf:    pdfUrl,
+  };
+
+  if (id) {
+    const idx = vouchers.findIndex(v => v.id === id);
+    vouchers[idx] = { ...vouchers[idx], ...data };
+  } else {
+    vouchers.push({ id: newId(), archived: false, ...data });
+  }
+
+  closeOverlay('voucherOverlay');
+  render(); updateSummary();
+  await saveData();
+}
+
+async function archiveVoucher(id) {
+  const v = vouchers.find(x => x.id === id);
+  if (!v) return;
+  v.archived = true;
+  render(); updateSummary();
+  await saveData();
+}
+
+async function restoreVoucher(id) {
+  const v = vouchers.find(x => x.id === id);
+  if (!v) return;
+  v.archived = false;
+  render(); updateSummary();
+  await saveData();
+}
+
+function askDelete(id) {
+  document.getElementById('deleteTargetId').value = id;
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwError').style.display = 'none';
+  openOverlay('pwOverlay');
+  setTimeout(() => document.getElementById('pwInput').focus(), 300);
+}
+
+async function confirmDelete() {
+  const pw = document.getElementById('pwInput').value;
+  if (pw !== cfg.password) {
+    document.getElementById('pwError').style.display = 'block';
+    return;
+  }
+  const id = document.getElementById('deleteTargetId').value;
+  vouchers = vouchers.filter(v => v.id !== id);
+  closeOverlay('pwOverlay');
+  render(); updateSummary();
+  await saveData();
+}
+
+// ─── PDF UPLOAD ───────────────────────────────────────────────────────────────
+let pendingPdfFile = null;
+
+function handlePdfSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  pendingPdfFile = file;
+  document.getElementById('pdfUploadLabel').innerHTML =
+    `✅ <strong>${file.name}</strong> <span style="color:var(--text-muted);font-size:0.8rem">(${(file.size/1024).toFixed(0)} KB) — wird beim Speichern hochgeladen</span>`;
+}
+
+async function uploadPdfToDrive(file) {
+  showStatus('PDF wird hochgeladen…', 'loading');
+  const metadata = {
+    name: file.name,
+    mimeType: 'application/pdf',
+    // Upload into same folder as gutscheine.json
+  };
+
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+  form.append('file', file);
+
+  const resp = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${accessToken}` },
+    body: form,
+  });
+
+  if (!resp.ok) throw new Error('PDF upload failed');
+  const data = await resp.json();
+
+  // Make file readable by anyone with the link
+  await fetch(`https://www.googleapis.com/drive/v3/files/${data.id}/permissions`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ role: 'reader', type: 'anyone' }),
+  });
+
+  return data.webViewLink;
+}
+
+// ─── OVERLAY HELPERS ──────────────────────────────────────────────────────────
+function openOverlay(id)  { document.getElementById(id).classList.add('open'); }
+function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
+function closeOverlayOutside(e, id) { if (e.target.id === id) closeOverlay(id); }
+
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
+(function boot() {
+  if (!cfg) {
+    document.getElementById('setupScreen').style.display = 'block';
+  } else {
+    document.getElementById('mainApp').style.display = 'block';
+    document.getElementById('fabBtn').style.display = 'flex';
+    initGoogleApi();
+  }
+})();
+</script>
+</body>
+</html>
