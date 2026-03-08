@@ -919,19 +919,7 @@ let tokenClient = null;
 const cfg = getCfg();
 
 function initGoogle() {
-  // Load GAPI
-  const s1 = document.createElement('script');
-  s1.src = 'https://apis.google.com/js/api.js';
-  s1.onload = () => {
-    gapi.load('client', async () => {
-      await gapi.client.init({
-        apiKey: cfg.apiKey,
-        discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-      });
-      loadGsi();
-    });
-  };
-  document.head.appendChild(s1);
+  loadGsi();
 }
 
 function loadGsi() {
@@ -944,7 +932,6 @@ function loadGsi() {
       callback: (resp) => {
         if (resp.error) { showStatus('Anmeldung fehlgeschlagen', 'err'); return; }
         accessToken = resp.access_token;
-        gapi.client.setToken({ access_token: accessToken });
         loadData();
       },
     });
@@ -957,35 +944,68 @@ function loadGsi() {
 let vouchers = [];
 let currentTab = 'active';
 
+async function sheetsGet(range) {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${encodeURIComponent(range)}`;
+  const r = await fetch(url, { headers: { 'Authorization': `Bearer ${accessToken}` } });
+  if (!r.ok) throw Object.assign(new Error('sheetsGet failed'), { status: r.status });
+  return r.json();
+}
+
+async function sheetsUpdate(range, values) {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`;
+  const r = await fetch(url, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ values }),
+  });
+  if (!r.ok) throw new Error('sheetsUpdate failed');
+  return r.json();
+}
+
+async function sheetsAppend(values) {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}/values/${encodeURIComponent(SHEET_NAME+'!A:I')}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`;
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ values }),
+  });
+  if (!r.ok) throw new Error('sheetsAppend failed');
+  return r.json();
+}
+
+async function sheetsBatchUpdate(requests) {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}:batchUpdate`;
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ requests }),
+  });
+  if (!r.ok) throw new Error('sheetsBatchUpdate failed');
+  return r.json();
+}
+
+async function sheetsGetMeta() {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${cfg.sheetId}`;
+  const r = await fetch(url, { headers: { 'Authorization': `Bearer ${accessToken}` } });
+  if (!r.ok) throw new Error('sheetsGetMeta failed');
+  return r.json();
+}
+
 async function ensureHeaders() {
-  // Check if header row exists
   try {
-    const resp = await gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId: cfg.sheetId,
-      range: `${SHEET_NAME}!A1:I1`,
-    });
-    const vals = resp.result.values;
+    const data = await sheetsGet(`${SHEET_NAME}!A1:I1`);
+    const vals = data.values;
     if (!vals || vals[0][0] !== 'id') {
-      // Write headers
-      await gapi.client.sheets.spreadsheets.values.update({
-        spreadsheetId: cfg.sheetId,
-        range: `${SHEET_NAME}!A1:I1`,
-        valueInputOption: 'RAW',
-        resource: { values: [COLS] },
-      });
+      await sheetsUpdate(`${SHEET_NAME}!A1:I1`, [COLS]);
     }
   } catch(e) {
-    // Sheet tab might not exist — create it
-    await gapi.client.sheets.spreadsheets.batchUpdate({
-      spreadsheetId: cfg.sheetId,
-      resource: { requests: [{ addSheet: { properties: { title: SHEET_NAME } } }] },
-    });
-    await gapi.client.sheets.spreadsheets.values.update({
-      spreadsheetId: cfg.sheetId,
-      range: `${SHEET_NAME}!A1:I1`,
-      valueInputOption: 'RAW',
-      resource: { values: [COLS] },
-    });
+    if (e.status === 400 || e.message.includes('Unable to parse range')) {
+      // Sheet tab doesn't exist — create it
+      await sheetsBatchUpdate([{ addSheet: { properties: { title: SHEET_NAME } } }]);
+      await sheetsUpdate(`${SHEET_NAME}!A1:I1`, [COLS]);
+    } else {
+      throw e;
+    }
   }
 }
 
@@ -1012,14 +1032,11 @@ async function loadData() {
   showStatus('Lade Daten…', 'load');
   try {
     await ensureHeaders();
-    const resp = await gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId: cfg.sheetId,
-      range: `${SHEET_NAME}!A2:I`,
-    });
-    const rows = resp.result.values || [];
+    const data = await sheetsGet(`${SHEET_NAME}!A2:I`);
+    const rows = data.values || [];
     vouchers = rows.map((row, i) => {
       const v = rowToVoucher(row);
-      v._row = i + 2; // 1-indexed, row 1 is header
+      v._row = i + 2;
       return v;
     }).filter(v => v.id);
     hideStatus();
@@ -1039,13 +1056,7 @@ async function loadData() {
 async function appendVoucher(v) {
   showStatus('Speichern…', 'load');
   try {
-    await gapi.client.sheets.spreadsheets.values.append({
-      spreadsheetId: cfg.sheetId,
-      range: `${SHEET_NAME}!A:I`,
-      valueInputOption: 'RAW',
-      insertDataOption: 'INSERT_ROWS',
-      resource: { values: [voucherToRow(v)] },
-    });
+    await sheetsAppend([voucherToRow(v)]);
     hideStatus();
   } catch(e) {
     console.error('append:', e);
@@ -1056,12 +1067,7 @@ async function appendVoucher(v) {
 async function updateVoucher(v) {
   showStatus('Speichern…', 'load');
   try {
-    await gapi.client.sheets.spreadsheets.values.update({
-      spreadsheetId: cfg.sheetId,
-      range: `${SHEET_NAME}!A${v._row}:I${v._row}`,
-      valueInputOption: 'RAW',
-      resource: { values: [voucherToRow(v)] },
-    });
+    await sheetsUpdate(`${SHEET_NAME}!A${v._row}:I${v._row}`, [voucherToRow(v)]);
     hideStatus();
   } catch(e) {
     console.error('update:', e);
@@ -1072,26 +1078,18 @@ async function updateVoucher(v) {
 async function deleteVoucherRow(v) {
   showStatus('Löschen…', 'load');
   try {
-    // Get sheet id (gid) first
-    const meta = await gapi.client.sheets.spreadsheets.get({ spreadsheetId: cfg.sheetId });
-    const sheet = meta.result.sheets.find(s => s.properties.title === SHEET_NAME);
-    const sheetGid = sheet.properties.sheetId;
-
-    await gapi.client.sheets.spreadsheets.batchUpdate({
-      spreadsheetId: cfg.sheetId,
-      resource: {
-        requests: [{
-          deleteDimension: {
-            range: {
-              sheetId: sheetGid,
-              dimension: 'ROWS',
-              startIndex: v._row - 1,
-              endIndex: v._row,
-            }
-          }
-        }]
+    const meta = await sheetsGetMeta();
+    const sheet = meta.sheets.find(s => s.properties.title === SHEET_NAME);
+    await sheetsBatchUpdate([{
+      deleteDimension: {
+        range: {
+          sheetId: sheet.properties.sheetId,
+          dimension: 'ROWS',
+          startIndex: v._row - 1,
+          endIndex: v._row,
+        }
       }
-    });
+    }]);
     hideStatus();
   } catch(e) {
     console.error('delete:', e);
